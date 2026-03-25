@@ -1,97 +1,30 @@
 {
   "lat": -6.2,
   "lng": 106.8,
-  "offsets": {
-    "fajr": 0,
-    "sunrise": 0,
-    "dhuhr": 0,
-    "asr": 0,
-    "maghrib": 0,
-    "isha": 0
-  },
-  "iqomah": {
-    "fajr": 10,
-    "dhuhr": 10,
-    "asr": 10,
-    "maghrib": 10,
-    "isha": 10
-  },
+  "offsets": { "fajr": 0, "sunrise": 0, "dhuhr": 0, "asr": 0, "maghrib": 0, "isha": 0 },
+  "iqomah": { "fajr": 10, "dhuhr": 10, "asr": 10, "maghrib": 10, "isha": 10 },
   "drift": 0,
-  "cash": -22541241,
+  "cash": 0,
   "runningText": "YADM (Yet Another Display Mosque) - Selamat datang jamaah sekalian. Mari rapatkan shaf.",
   "bigInfo": "",
   "infos": [
-    {
-      "id": "13u13ec",
-      "header": "tes",
-      "content": "YADM (Yet Another Display Mosque) - Selamat datang jamaah sekalian. Mari rapatkan shaf. YADM (Yet Another Display Mosque) - Selamat datang jamaah sekalian. Mari rapatkan shaf.",
-      "footer": "civo",
-      "active": true
-    },
-    {
-      "id": "kl3eytt",
-      "header": "tes",
-      "content": "12345678990qwerttyuiopasdfghjklzxcvbnm",
-      "footer": "civo",
-      "active": false
-    },
-    {
-      "id": "x51a7pr",
-      "header": "tes",
-      "content": "lorem ipsum... wait... ngapain gua manual?",
-      "footer": "civo",
-      "active": false
-    },
-    {
-      "id": "7sioyvj",
-      "header": "tes",
-      "content": "ini bukan hadis ini lorem ipsum\n",
-      "footer": "civo",
-      "active": true
-    },
     {
       "id": "1",
       "header": "Hadits Hari Ini",
       "content": "Barangsiapa yang menempuh jalan untuk mencari ilmu, maka Allah akan memudahkan baginya jalan menuju surga.",
       "footer": "HR. Muslim",
-      "active": false
+      "active": true
     }
   ],
-  "preAdzanDuration": 1,
+  "preAdzanDuration": 10,
   "sholatDuration": 15,
-  "bgSlideshowDuration": 15,
-  "infoSlideshowDuration": 5,
-  "transactions": [
-    {
-      "id": "ps3jkss31pmn6a3gz7",
-      "date": "25 Mar 2026",
-      "desc": "nnujinuinui",
-      "amount": 678789,
-      "type": "in"
-    },
-    {
-      "id": "8fbd50b8-951b-4557-a8fe-980531606690",
-      "date": "25 Mar 2026",
-      "desc": "dfvgfbvd",
-      "amount": 23222252,
-      "type": "out"
-    },
-    {
-      "id": "744c68bb-3bb9-46ae-9924-b50149da9d0e",
-      "date": "25 Mar 2026",
-      "desc": "ededed",
-      "amount": 2222,
-      "type": "in"
-    }
-  ],
+  "bgSlideshowDuration": 60,
+  "infoSlideshowDuration": 15,
+  "transactions": [],
   "adminPassword": "vibe-masjid",
-  "backgrounds": [
-    "/uploads/1774360995771-462476427.jpg",
-    "/uploads/1774443073083-38049534.jpg",
-    "/uploads/1774466098438-432780596.jpg"
-  ],
+  "backgrounds": [],
   "fridayKhatib": "Ustadz Ahmad Fulan",
   "fridayKhutbahDuration": 20,
   "hideTransactionAmount": false,
-  "theme": "sunset"
+  "theme": "vibe"
 }
