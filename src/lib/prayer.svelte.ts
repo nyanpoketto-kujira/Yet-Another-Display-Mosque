@@ -1,6 +1,7 @@
 import { Coordinates, CalculationMethod, PrayerTimes, SunnahTimes, Prayer } from 'adhan';
 import { settings } from './settings.svelte';
 import moment from 'moment-hijri';
+import { browser } from '$app/environment';
 
 export type DisplayMode = 'normal' | 'preadzan' | 'iqomah' | 'sholat' | 'khutbah';
 
@@ -197,13 +198,15 @@ class PrayerService {
 	});
 
 	constructor() {
-		setInterval(() => {
-			this.now = new Date();
-			// Kalo lagi debug, kurangin timer manual tiap detik
-			if (this.#debugCountdown !== null && this.#debugCountdown > 0) {
-				this.#debugCountdown--;
-			}
-		}, 1000);
+		if (browser) {
+			setInterval(() => {
+				this.now = new Date();
+				// Kalo lagi debug, kurangin timer manual tiap detik
+				if (this.#debugCountdown !== null && this.#debugCountdown > 0) {
+					this.#debugCountdown--;
+				}
+			}, 1000);
+		}
 	}
 }
 

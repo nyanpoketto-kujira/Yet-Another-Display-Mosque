@@ -32,7 +32,7 @@
 		Info,
 		Zap,
 		Cpu,
-		Github,
+		Computer,
 		Heart
 	} from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
@@ -179,17 +179,21 @@
 		} catch (err) { alert('Gagal menghapus gambar.'); }
 	}
 
-	const offsetKeys = Object.keys(settings.value.offsets) as (keyof Settings['offsets'])[];
-	const iqomahKeys = Object.keys(settings.value.iqomah) as (keyof Settings['iqomah'])[];
-
 	async function handleSave() {
 		await settings.save();
 		alert('Alhamdulillah, semua perubahan berhasil disimpan.');
 	}
+
+	const offsetKeys = $derived(settings.value ? Object.keys(settings.value.offsets) as (keyof Settings['offsets'])[] : []);
+	const iqomahKeys = $derived(settings.value ? Object.keys(settings.value.iqomah) as (keyof Settings['iqomah'])[] : []);
 </script>
 
 <div class="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
-	{#if !isAuthenticated}
+	{#if !settings.value}
+		<div class="flex min-h-screen items-center justify-center">
+			<div class="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500"></div>
+		</div>
+	{:else if !isAuthenticated}
 		<div class="flex min-h-screen items-center justify-center p-4" transition:fade>
 			<div class="w-full max-w-md rounded-[2rem] border border-slate-800 bg-slate-900 p-8 text-center shadow-2xl md:p-10">
 				<div class="mb-6 inline-block rounded-2xl bg-blue-500/10 p-4"><Lock class="h-8 w-8 text-blue-400" /></div>
@@ -295,10 +299,10 @@
 						<div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
 							{#each offsetKeys as p}
 								<div class="rounded-2xl border border-slate-800 bg-slate-950 p-4 text-center">
-									<label class="mb-2 block text-[10px] font-black text-slate-500 uppercase">{prayerLabels[p]}</label>
+									<label for="offset-{p}" class="mb-2 block text-[10px] font-black text-slate-500 uppercase">{prayerLabels[p]}</label>
 									<div class="flex items-center justify-center gap-2">
 										<button onclick={() => settings.value.offsets[p]--} class="p-2 hover:text-white transition-colors text-slate-500"><Minus class="h-4 w-4" /></button>
-										<input type="number" bind:value={settings.value.offsets[p]} class="w-14 bg-transparent text-center text-2xl font-black outline-none text-emerald-400" />
+										<input id="offset-{p}" type="number" bind:value={settings.value.offsets[p]} class="w-14 bg-transparent text-center text-2xl font-black outline-none text-emerald-400" />
 										<button onclick={() => settings.value.offsets[p]++} class="p-2 hover:text-white transition-colors text-slate-500"><Plus class="h-4 w-4" /></button>
 									</div>
 								</div>
@@ -313,10 +317,10 @@
 						<div class="grid grid-cols-2 gap-4 sm:grid-cols-5">
 							{#each iqomahKeys as p}
 								<div class="rounded-2xl border border-slate-800 bg-slate-950 p-4 text-center">
-									<label class="mb-2 block text-[10px] font-black text-slate-500 uppercase">{prayerLabels[p]}</label>
+									<label for="iqomah-{p}" class="mb-2 block text-[10px] font-black text-slate-500 uppercase">{prayerLabels[p]}</label>
 									<div class="flex items-center justify-center gap-1">
 										<button onclick={() => settings.value.iqomah[p]--} class="p-1 hover:text-white transition-colors text-slate-700"><Minus class="h-4 w-4" /></button>
-										<input type="number" bind:value={settings.value.iqomah[p]} class="w-14 bg-transparent text-center text-2xl font-black outline-none text-blue-400" />
+										<input id="iqomah-{p}" type="number" bind:value={settings.value.iqomah[p]} class="w-14 bg-transparent text-center text-2xl font-black outline-none text-blue-400" />
 										<button onclick={() => settings.value.iqomah[p]++} class="p-1 hover:text-white transition-colors text-slate-700"><Plus class="h-4 w-4" /></button>
 									</div>
 									<span class="text-[8px] font-black text-slate-700 uppercase">Menit</span>
@@ -330,14 +334,14 @@
 						<div class="mb-6 flex items-center gap-3"><LayoutDashboard class="h-5 w-5 text-purple-400" /><h2 class="text-sm font-black tracking-widest uppercase">Khusus Hari Jum'at</h2></div>
 						<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 							<div class="rounded-2xl border border-slate-800 bg-slate-950 p-6">
-								<label class="mb-4 block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Nama Khathib</label>
-								<input type="text" bind:value={settings.value.fridayKhatib} placeholder="Nama Khathib..." class="w-full rounded-xl border border-slate-800 bg-slate-900 p-4 text-sm font-bold outline-none focus:ring-2 focus:ring-purple-500" />
+								<label for="friday-khatib" class="mb-4 block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Nama Khathib</label>
+								<input id="friday-khatib" type="text" bind:value={settings.value.fridayKhatib} placeholder="Nama Khathib..." class="w-full rounded-xl border border-slate-800 bg-slate-900 p-4 text-sm font-bold outline-none focus:ring-2 focus:ring-purple-500" />
 							</div>
 							<div class="rounded-2xl border border-slate-800 bg-slate-950 p-6">
-								<label class="mb-4 block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Durasi Khutbah (Menit)</label>
+								<label for="friday-duration" class="mb-4 block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Durasi Khutbah (Menit)</label>
 								<div class="flex items-center gap-4">
 									<Timer class="h-6 w-6 text-purple-400" />
-									<input type="number" bind:value={settings.value.fridayKhutbahDuration} class="flex-1 bg-transparent text-2xl font-black outline-none text-white" />
+									<input id="friday-duration" type="number" bind:value={settings.value.fridayKhutbahDuration} class="flex-1 bg-transparent text-2xl font-black outline-none text-white" />
 								</div>
 							</div>
 						</div>
@@ -423,8 +427,30 @@
 						</div>
 					</section>
 
-					<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl text-center"><div class="flex items-center justify-center gap-3 mb-6"><MapPin class="h-5 w-5 text-emerald-400" /><h2 class="text-sm font-black tracking-widest uppercase">Koordinat Lokasi</h2></div><div class="grid grid-cols-2 gap-4"><div><label class="mb-2 block text-[10px] font-black text-slate-500 uppercase">Lat</label><input type="number" step="any" bind:value={settings.value.lat} class="w-full rounded-xl border border-slate-800 bg-slate-950 p-4 text-center text-sm" /></div><div><label class="mb-2 block text-[10px] font-black text-slate-500 uppercase">Lng</label><input type="number" step="any" bind:value={settings.value.lng} class="w-full rounded-xl border border-slate-800 bg-slate-950 p-4 text-center text-sm" /></div></div></section>
-					<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl text-center"><div class="flex items-center justify-center gap-3 mb-6"><Key class="h-5 w-5 text-blue-400" /><h2 class="text-sm font-black tracking-widest uppercase">Keamanan</h2></div><label class="mb-2 block text-[10px] font-black text-slate-500 uppercase">Kata Sandi Baru</label><input type="text" bind:value={settings.value.adminPassword} class="w-full rounded-xl border border-slate-800 bg-slate-950 p-4 text-center font-mono text-sm" /></section>
+					<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl text-center">
+						<div class="flex items-center justify-center gap-3 mb-6">
+							<MapPin class="h-5 w-5 text-emerald-400" />
+							<h2 class="text-sm font-black tracking-widest uppercase">Koordinat Lokasi</h2>
+						</div>
+						<div class="grid grid-cols-2 gap-4">
+							<div>
+								<label for="lat" class="mb-2 block text-[10px] font-black text-slate-500 uppercase">Lat</label>
+								<input id="lat" type="number" step="any" bind:value={settings.value.lat} class="w-full rounded-xl border border-slate-800 bg-slate-950 p-4 text-center text-sm" />
+							</div>
+							<div>
+								<label for="lng" class="mb-2 block text-[10px] font-black text-slate-500 uppercase">Lng</label>
+								<input id="lng" type="number" step="any" bind:value={settings.value.lng} class="w-full rounded-xl border border-slate-800 bg-slate-950 p-4 text-center text-sm" />
+							</div>
+						</div>
+					</section>
+					<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl text-center">
+						<div class="flex items-center justify-center gap-3 mb-6">
+							<Key class="h-5 w-5 text-blue-400" />
+							<h2 class="text-sm font-black tracking-widest uppercase">Keamanan</h2>
+						</div>
+						<label for="admin-password" class="mb-2 block text-[10px] font-black text-slate-500 uppercase">Kata Sandi Baru</label>
+						<input id="admin-password" type="text" bind:value={settings.value.adminPassword} class="w-full rounded-xl border border-slate-800 bg-slate-950 p-4 text-center font-mono text-sm" />
+					</section>
 				</div>
 			{/if}
 
@@ -464,7 +490,7 @@
 
 						<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
 							<a href="https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque" target="_blank" class="flex items-center justify-center gap-3 rounded-2xl border border-slate-800 bg-slate-950 p-4 transition-all hover:bg-slate-800">
-								<Github class="h-5 w-5 text-white" />
+								<Computer class="h-5 w-5 text-white" />
 								<span class="text-xs font-black uppercase tracking-widest">Source Code</span>
 							</a>
 							<div class="flex items-center justify-center gap-3 rounded-2xl border border-slate-800 bg-slate-950 p-4">
