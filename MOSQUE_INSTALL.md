@@ -44,50 +44,72 @@ Pilih salah satu cara berikut untuk memasang YADM:
 
 ## 🖥️ Langkah 3: Setup Autorun & Mode Kiosk (Penting!)
 
-Agar sistem benar-benar otomatis, kita ingin komputer langsung membuka browser dalam mode Fullscreen (Kiosk) saat menyala.
+Agar sistem benar-benar otomatis, kita ingin komputer langsung membuka browser dalam mode Fullscreen (Kiosk) saat menyala tanpa intervensi manusia.
 
-### 🪟 Di Windows (Google Chrome / Edge)
-1.  Buat shortcut baru di Desktop untuk Chrome/Edge.
-2.  Klik kanan shortcut tersebut -> **Properties**.
-3.  Di kolom **Target**, tambahkan kode berikut di paling ujung (setelah tanda kutip):
-    ` --kiosk http://localhost:3000`
-    *(Contoh: `"C:\...\chrome.exe" --kiosk http://localhost:3000`)*
-4.  Pindahkan shortcut ini ke folder Startup (`Win+R` -> `shell:startup`).
+### 🪟 Di Windows (Semua Versi)
+1.  **Matikan Power Saving**: Buka `Power & Sleep Settings` -> Pastikan **Screen** dan **Sleep** diatur ke **Never**.
+2.  **Buat Shortcut Kiosk**:
+    *   Cari Chrome/Edge di Start Menu -> Klik kanan -> Open file location.
+    *   Klik kanan icon Chrome -> **Send to Desktop (create shortcut)**.
+    *   Di Desktop, klik kanan shortcut tersebut -> **Properties**.
+    *   Di kolom **Target**, tambahkan ini di paling ujung:
+        ` --kiosk --edge-kiosk-type=fullscreen http://localhost:3000`
+3.  **Autorun**: Tekan `Win+R` -> Ketik `shell:startup` -> Pindahkan shortcut tadi ke folder yang terbuka.
 
-### 🐧 Di Linux (Raspberry Pi / Ubuntu)
+---
 
-Untuk Linux, kita perlu dua hal: menjalankan program di background, dan membuka browser saat desktop menyala.
+### 🐧 Di Linux (Ubuntu, Debian, Mint, Arch, dll)
 
-**1. Jalankan Program di Background (Systemd):**
+Di Linux, kita butuh dua tahap: menjalankan server di background dan membuka browser di desktop.
+
+#### 1. Jalankan Server di Background (Systemd)
+Ini agar program jalan otomatis sebelum Anda login ke desktop.
 *   Buat file service: `sudo nano /etc/systemd/system/yadm.service`
-*   Copy-paste teks berikut (sesuaikan PATH-nya):
+*   Isi dengan (Sesuaikan `User` dan `WorkingDirectory` dengan username & lokasi folder Anda):
     ```ini
     [Unit]
-    Description=YADM Runner
+    Description=YADM Server
     After=network.target
 
     [Service]
     Type=simple
-    User=pi
-    WorkingDirectory=/home/pi/YADM/runner/linux
-    ExecStart=/home/pi/YADM/runner/linux/start.sh
+    User=NAMA_USER_ANDA
+    WorkingDirectory=/home/NAMA_USER_ANDA/YADM/runner/linux
+    ExecStart=/home/NAMA_USER_ANDA/YADM/runner/linux/start.sh
     Restart=always
 
     [Install]
     WantedBy=multi-user.target
     ```
-*   Enable: `sudo systemctl enable yadm && sudo systemctl start yadm`
+*   Aktifkan: `sudo systemctl enable yadm && sudo systemctl start yadm`
 
-**2. Buka Browser saat Boot:**
-*   Edit file autostart (Raspberry Pi): `nano /home/pi/.config/lxsession/LXDE-pi/autostart`
-*   Tambahkan baris ini di paling bawah:
+#### 2. Jalankan Browser Otomatis (XDG Autostart)
+Cara ini bekerja di hampir semua distro Linux (GNOME, XFCE, KDE).
+*   Buat folder autostart jika belum ada: `mkdir -p ~/.config/autostart`
+*   Buat file: `nano ~/.config/autostart/yadm-browser.desktop`
+*   Isi dengan:
+    ```ini
+    [Desktop Entry]
+    Type=Application
+    Name=YADM Browser
+    Exec=chromium-browser --kiosk --incognito http://localhost:3000
+    # Jika pake Chrome, ganti chromium-browser jadi google-chrome
+    X-GNOME-Autostart-enabled=true
+    ```
+
+#### 3. Tips Tambahan: Matikan Screen Blanking & Sembunyikan Kursor
+Display masjid harus menyala terus 24/7.
+*   **Sembunyikan Kursor**: Install `unclutter` (`sudo apt install unclutter`) lalu tambahkan `@unclutter -idle 0.1 -root` di startup.
+*   **Matikan Screen Sleep (X11)**: Tambahkan perintah berikut di file `.xinitrc` atau di autostart:
     ```bash
-    @chromium-browser --kiosk --incognito http://localhost:3000
+    xset s off
+    xset -dpms
+    xset s noblank
     ```
 
 ---
 
-## ⌨️ Pintasan Keyboard (Cara Keluar)
+## ⌨️ Pintasan Keyboard (Cara Navigasi)
 
 Saat dalam Mode Kiosk (Fullscreen), Anda tidak akan melihat tombol close atau taskbar. Gunakan pintasan berikut:
 
