@@ -1,42 +1,23 @@
-# sv
+# YADM (Yet Another Display Mosque)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A modern, vibe-centric mosque display for 1080p screens.
 
-## Creating a project
+## Features
+- **Dynamic Prayer Times**: Auto-calculating based on local coordinates.
+- **SSE Real-time Updates**: Changes from the admin panel reflect instantly.
+- **Scale-Independent Layout**: Uses `vh` and `clamp()` for perfect scaling.
+- **Background Slideshow**: Support for custom image uploads.
+- **Kas Display**: Real-time transaction history (Pemasukan/Pengeluaran).
+- **Friday Mode**: Special Khathib overlay on Fridays.
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project
-npx sv create my-app
-```
-
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-pnpm dlx sv@0.12.8 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" --install pnpm vibe-mosque-display
-```
+## Tech Stack
+- SvelteKit (Runes/Svelte 5)
+- TailwindCSS
+- Lucide Icons
+- SSE (Server-Sent Events)
 
 ## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```bash
+pnpm install
+pnpm dev
 ```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

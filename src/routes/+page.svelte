@@ -210,8 +210,8 @@
 					{/key}
 				{:else}
 					<div class="flex h-full w-full items-center justify-center opacity-20">
-						<Sparkles class="h-[6vh] w-[6vh] mr-[2vh]" />
-						<span class="text-[4vh] font-black uppercase tracking-[0.4em]">Vibe Mosque</span>
+						<Sparkles class="mr-[2vh] h-[6vh] w-[6vh]" />
+						<span class="text-[4vh] font-black uppercase tracking-[0.4em]">YADM</span>
 					</div>
 				{/if}
 
