@@ -18,9 +18,10 @@
 </script>
 
 <div
-	class="w-full overflow-hidden rounded-2xl border-t py-2 text-white backdrop-blur-md {themeClasses}"
+	class="w-full overflow-hidden rounded-2xl border-t py-1 text-white backdrop-blur-md {themeClasses}"
 >
-	<div class="animate-marquee text-2xl font-medium whitespace-nowrap">
+	<div class="animate-marquee text2-xl font-medium whitespace-nowrap">
+		<span class="px-4">{settings.value.runningText}</span>
 		<span class="px-4">{settings.value.runningText}</span>
 		<span class="px-4">{settings.value.runningText}</span>
 		<span class="px-4">{settings.value.runningText}</span>

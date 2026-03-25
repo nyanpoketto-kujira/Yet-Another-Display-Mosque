@@ -45,9 +45,11 @@
 		return { name: 'Subuh', time: pt.fajr };
 	});
 
-	const latestIn = $derived(settings.value.transactions.filter((t) => t.type === 'in').slice(0, 3));
+	const latestIn = $derived(
+		settings.value.transactions.filter((t) => t.type === 'in').slice(0, 2)
+	);
 	const latestOut = $derived(
-		settings.value.transactions.filter((t) => t.type === 'out').slice(0, 3)
+		settings.value.transactions.filter((t) => t.type === 'out').slice(0, 2)
 	);
 
 	// BACKGROUND SLIDESHOW
@@ -208,8 +210,30 @@
 					{/key}
 				{:else}
 					<div class="flex h-full w-full items-center justify-center opacity-20">
-						<Sparkles class="mr-[2vh] h-[6vh] w-[6vh]" />
-						<span class="text-[4vh] font-black tracking-[0.4em] uppercase">Vibe Mosque</span>
+						<Sparkles class="h-[6vh] w-[6vh] mr-[2vh]" />
+						<span class="text-[4vh] font-black uppercase tracking-[0.4em]">Vibe Mosque</span>
+					</div>
+				{/if}
+
+				<!-- KHATHIB OVERLAY (Hanya hari Jum'at) -->
+				{#if prayerService.isFriday}
+					<div 
+						class="absolute bottom-0 left-0 right-0 flex items-center justify-between px-[4vh] py-[1.5vh] border-t border-white/10 {themeConfig.jumat.bg} backdrop-blur-xl transition-all"
+						transition:slide={{axis: 'y'}}
+					>
+						<div class="flex items-center gap-[2vh]">
+							<div class="rounded-[1.2vh] p-[1vh] {themeConfig.jumat.bg} border border-white/10">
+								<Mic2 class="h-[3vh] w-[3vh] {themeConfig.jumat.text}" />
+							</div>
+							<div class="flex flex-col">
+								<span class="text-[1.2vh] font-black uppercase tracking-[0.4em] {themeConfig.jumat.text}/80 leading-none mb-[0.5vh]">Khathib Jum'at</span>
+								<span class="text-[clamp(1.5rem,3.5vh,4.5rem)] font-black tracking-tight text-white uppercase leading-none drop-shadow-lg">{settings.value.fridayKhatib}</span>
+							</div>
+						</div>
+						<div class="flex items-center gap-[1.5vh] opacity-60">
+							<Sparkles class="h-[2.5vh] w-[2.5vh] {themeConfig.jumat.text}" />
+							<span class="text-[1.8vh] font-bold italic tracking-widest text-white/90">Jum'at Berkah</span>
+						</div>
 					</div>
 				{/if}
 			</div>
@@ -268,6 +292,7 @@
 					</div>
 					<div class="mt-[1vh] grid grid-cols-2 gap-[1.5vh] overflow-hidden">
 						<div class="space-y-[0.5vh]">
+							<span class="text-[1vh] font-black uppercase tracking-[0.2em] text-emerald-400/60">Pemasukan</span>
 							{#each latestIn as tx}
 								<div
 									class="flex items-center justify-between rounded-[0.8vh] border border-white/5 bg-white/5 px-[1.2vh] py-[0.5vh] text-[1.5vh] font-bold"
@@ -280,6 +305,7 @@
 							{/each}
 						</div>
 						<div class="space-y-[0.5vh]">
+							<span class="text-[1vh] font-black uppercase tracking-[0.2em] text-rose-400/60">Pengeluaran</span>
 							{#each latestOut as tx}
 								<div
 									class="flex items-center justify-between rounded-[0.8vh] border border-white/5 bg-white/5 px-[1.2vh] py-[0.5vh] text-[1.5vh] font-bold"

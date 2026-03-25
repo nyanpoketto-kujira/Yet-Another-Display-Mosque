@@ -17,10 +17,17 @@
     "isha": 1
   },
   "drift": 0,
-  "cash": 32169439789,
+  "cash": -22541241,
   "runningText": "Masjid Al-Istiqomah  - Selamat datang jamaah sekalian. Mari rapatkan shaf. - tes 123",
   "bigInfo": "",
   "infos": [
+    {
+      "id": "7sioyvj",
+      "header": "tes",
+      "content": "ini bukan hadis ini lorem ipsum\n",
+      "footer": "civo",
+      "active": true
+    },
     {
       "id": "1",
       "header": "Hadits Hari Ini",
@@ -49,20 +56,6 @@
       "type": "out"
     },
     {
-      "id": "8f5de65c-0876-44a9-83bf-68cea3867460",
-      "date": "25 Mar 2026",
-      "desc": "2422542",
-      "amount": 242452525,
-      "type": "out"
-    },
-    {
-      "id": "77bb11ab-9986-4dfd-9cb2-d05150b8f231",
-      "date": "25 Mar 2026",
-      "desc": "232323233434545vvf",
-      "amount": 32434433555,
-      "type": "in"
-    },
-    {
       "id": "744c68bb-3bb9-46ae-9924-b50149da9d0e",
       "date": "25 Mar 2026",
       "desc": "ededed",
@@ -77,6 +70,6 @@
   ],
   "fridayKhatib": "Ustadz Ahmad Fulan",
   "fridayKhutbahDuration": 20,
-  "hideTransactionAmount": true,
-  "theme": "vibe"
+  "hideTransactionAmount": false,
+  "theme": "modern"
 }
