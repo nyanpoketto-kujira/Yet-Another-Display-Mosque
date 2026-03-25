@@ -18,7 +18,7 @@
 </script>
 
 <div
-	class="w-full overflow-hidden border-t py-4 text-white backdrop-blur-md rounded-2xl {themeClasses}"
+	class="w-full overflow-hidden rounded-2xl border-t py-2 text-white backdrop-blur-md {themeClasses}"
 >
 	<div class="animate-marquee text-2xl font-medium whitespace-nowrap">
 		<span class="px-4">{settings.value.runningText}</span>

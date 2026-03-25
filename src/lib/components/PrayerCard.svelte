@@ -34,11 +34,11 @@
 </script>
 
 <div
-	class="flex h-full w-full flex-col items-center justify-center rounded-[2rem] border p-6 transition-all duration-700 {themeClasses}"
+	class="flex h-full w-full flex-col items-center justify-center rounded-[2.5vh] border p-[1vh] transition-all duration-700 {themeClasses}"
 >
-	<span class="mb-2 text-xl font-black tracking-[0.2em] uppercase opacity-60 md:text-2xl"
+	<span class="mb-[0.2vh] text-[clamp(0.8rem,1.8vh,1.5rem)] font-black tracking-[0.2em] uppercase opacity-60"
 		>{name}</span
 	>
-	<span class="text-5xl font-black tabular-nums drop-shadow-md md:text-6xl">{formatTime(time)}</span
+	<span class="text-[clamp(2rem,5.5vh,7rem)] font-black tabular-nums drop-shadow-md">{formatTime(time)}</span
 	>
 </div>
