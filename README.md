@@ -16,6 +16,44 @@
 - 📜 **Informasi & Teks Berjalan**: Sampaikan pengumuman atau hadits dengan gaya elegan.
 - 🕌 **Mode Jum'at**: Tampilan khusus untuk nama Khathib dan durasi khutbah.
 
+## 📸 Galeri Tampilan
+
+<details>
+<summary><b>✨ Klik untuk melihat galeri tampilan (Main Display & Admin Panel)</b></summary>
+
+### 📺 Main Display (Tampilan TV)
+Tampilan utama yang elegan dan informatif untuk jamaah di masjid.
+
+| Tampilan Utama | Mode Azan |
+| :---: | :---: |
+| ![Main Display](img/main-display.png) | ![Azan](img/main-display-azan.png) |
+| *Dashboard Utama* | *Pemberitahuan Waktu Azan* |
+
+| Mode Iqomah | Mode Shalat |
+| :---: | :---: |
+| ![Iqomah](img/main-display-iqomah.png) | ![Shalat](img/main-display-shalat.png) |
+| *Hitung Mundur Iqomah* | *Layar Instruksi Shalat* |
+
+| Mode Jum'at | Mode Khutbah |
+| :---: | :---: |
+| ![Jumat](img/main-display-jumat.png) | ![Khutbah](img/main-display-khutbah.png) |
+| *Info Khathib & Muazin* | *Timer Khutbah Jum'at* |
+
+### 📱 Panel Admin (Pengaturan)
+Kelola semua konten display dengan mudah melalui HP atau PC.
+
+| Desktop (Admin) | Mobile (Admin) |
+| :---: | :---: |
+| ![Admin PC](img/admin-pc-general.png) | ![Admin HP](img/admin-hp-general.jpg) |
+| *Pengaturan via Desktop* | *Responsif di HP* |
+
+| Manajemen Kas | Layar Terkunci |
+| :---: | :---: |
+| ![Kas](img/admin-pc-kas.png) | ![Lock](img/admin-pc-lock.png) |
+| *Transparansi Dana Umat* | *Keamanan Akses Panel* |
+
+</details>
+
 ## 🛠️ Tech Stack
 
 - **Framework**: [Svelte 5](https://svelte.dev/) (Runes)

@@ -1,10 +1,23 @@
 {
   "lat": -6.2,
   "lng": 106.8,
-  "offsets": { "fajr": 0, "sunrise": 0, "dhuhr": 0, "asr": 0, "maghrib": 0, "isha": 0 },
-  "iqomah": { "fajr": 10, "dhuhr": 10, "asr": 10, "maghrib": 10, "isha": 10 },
+  "offsets": {
+    "fajr": 0,
+    "sunrise": 0,
+    "dhuhr": 0,
+    "asr": 0,
+    "maghrib": 0,
+    "isha": 0
+  },
+  "iqomah": {
+    "fajr": 10,
+    "dhuhr": 10,
+    "asr": 10,
+    "maghrib": 10,
+    "isha": 10
+  },
   "drift": 0,
-  "cash": 0,
+  "cash": 410000,
   "runningText": "YADM (Yet Another Display Mosque) - Selamat datang jamaah sekalian. Mari rapatkan shaf.",
   "bigInfo": "",
   "infos": [
@@ -18,13 +31,37 @@
   ],
   "preAdzanDuration": 10,
   "sholatDuration": 15,
-  "bgSlideshowDuration": 60,
+  "bgSlideshowDuration": 1,
   "infoSlideshowDuration": 15,
-  "transactions": [],
+  "transactions": [
+    {
+      "id": "4z143eamippmn6o1rjj",
+      "date": "26 Mar 2026",
+      "desc": "Pembelian peralatan",
+      "amount": 340000,
+      "type": "out"
+    },
+    {
+      "id": "hwfyh8nbdp8mn6o107j",
+      "date": "26 Mar 2026",
+      "desc": "Kamis barokah ",
+      "amount": 250000,
+      "type": "in"
+    },
+    {
+      "id": "cqqyzto4pe6mn6o0319",
+      "date": "26 Mar 2026",
+      "desc": "Uang infaq",
+      "amount": 500000,
+      "type": "in"
+    }
+  ],
   "adminPassword": "vibe-masjid",
-  "backgrounds": [],
+  "backgrounds": [
+    "/uploads/1774480353845-374749208.jpg"
+  ],
   "fridayKhatib": "Ustadz Ahmad Fulan",
   "fridayKhutbahDuration": 20,
   "hideTransactionAmount": false,
-  "theme": "vibe"
+  "theme": "classic"
 }
