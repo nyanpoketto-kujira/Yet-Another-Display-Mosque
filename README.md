@@ -5,6 +5,9 @@
 ![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Build](https://img.shields.io/badge/build-Svelte_5-orange.svg)
+[![Demo](https://img.shields.io/badge/demo-live-success.svg)](https://al-yeandimo-demo.vercel.app/)
+
+> **🚀 COBA VERSI DEMO NYA DI SINI:** [al-yeandimo-demo.vercel.app](https://al-yeandimo-demo.vercel.app/)
 
 > **⚠️ DISCLAIMER:** Ini bukan "Yet Another Dotfiles Manager". Kami nggak ngurusin `.bashrc` lu, kami ngurusin biar jamaah nggak telat sholat. Al-Ye'AnDiMo adalah solusi display informasi masjid yang estetik, modern, dan gampang diurus.
 

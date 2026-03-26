@@ -5,6 +5,9 @@
 ![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Build](https://img.shields.io/badge/build-Svelte_5-orange.svg)
+[![Demo](https://img.shields.io/badge/demo-live-success.svg)](https://al-yeandimo-demo.vercel.app/)
+
+> **🚀 TRY THE LIVE DEMO HERE:** [al-yeandimo-demo.vercel.app](https://al-yeandimo-demo.vercel.app/)
 
 > **⚠️ DISCLAIMER:** This is NOT "Yet Another Dotfiles Manager". We don't manage your `.bashrc`, we manage your mosque's prayer times so the congregation isn't late. Al-Ye'AnDiMo is an aesthetic, modern, and easy-to-manage mosque information display solution.
 

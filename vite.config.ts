@@ -11,6 +11,6 @@ export default defineConfig({
 		}
 	},
 	ssr: {
-		noExternal: ['adhan', 'moment-hijri', 'lucide-svelte']
+		noExternal: ['adhan', 'lucide-svelte']
 	}
 });

@@ -1,6 +1,5 @@
 import { Coordinates, CalculationMethod, PrayerTimes, SunnahTimes, Prayer } from 'adhan';
 import { settings } from './settings.svelte';
-import moment from 'moment-hijri';
 import { browser } from '$app/environment';
 
 export type DisplayMode = 'normal' | 'preadzan' | 'iqomah' | 'sholat' | 'khutbah';
@@ -53,22 +52,13 @@ class PrayerService {
 	});
 
 	hijriDate = $derived.by(() => {
-		const m = moment(this.currentTime);
-		const bulanHijriah = [
-			'Muharram',
-			'Safar',
-			'Rabiul Awal',
-			'Rabiul Akhir',
-			'Jumadil Ula',
-			'Jumadil Akhira',
-			'Rajab',
-			'Syaban',
-			'Ramadhan',
-			'Syawal',
-			'Dzulqadah',
-			'Dzulhijjah'
-		];
-		return `${m.iDate()} ${bulanHijriah[m.iMonth()]} ${m.iYear()} H`;
+		return (
+			new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura-nu-latn', {
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric'
+			}).format(this.currentTime) + ' H'
+		);
 	});
 
 	gregorianDate = $derived.by(() => {
