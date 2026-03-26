@@ -1,10 +1,12 @@
-# 🕋 Yet Another Display Mosque (YADM)
+# 🕋 Al-Ye'AnDiMo (Alhamdulillah It's Yet Another Display Mosque)
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Build](https://img.shields.io/badge/build-Svelte_5-orange.svg)
 
-**YADM** adalah sistem display informasi masjid modern yang dirancang khusus untuk layar 1080p. Dengan fokus pada estetika "vibe-centric" dan kemudahan pengelolaan via Panel Admin yang intuitif.
+> **⚠️ DISCLAIMER:** Ini bukan "Yet Another Dotfiles Manager". Kami nggak ngurusin `.bashrc` lu, kami ngurusin biar jamaah nggak telat sholat. Al-Ye'AnDiMo adalah solusi display informasi masjid yang estetik, modern, dan gampang diurus.
+
+**Al-Ye'AnDiMo** adalah sistem display informasi masjid "vibe-centric" yang dirancang khusus untuk layar 1080p. Dibangun dengan teknologi terbaru demi kemaslahatan umat.
 
 ## ✨ Fitur Utama
 

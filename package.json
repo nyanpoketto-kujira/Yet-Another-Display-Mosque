@@ -1,7 +1,17 @@
 {
-	"name": "yadm",
+	"name": "al-ye-andimo",
 	"private": true,
-	"version": "0.0.1",
+	"description": "Al-Ye'AnDiMo (Alhamdulillah It's Yet Another Display Mosque) - Sistem Display Informasi Masjid Modern & Estetik built with Svelte 5 (Runes)",
+	"keywords": [
+		"mosque-display",
+		"jadwal-sholat",
+		"prayer-times",
+		"vibe-mosque",
+		"svelte-5",
+		"al-ye-andimo",
+		"digital-signage-mosque"
+	],
+	"version": "1.1.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
