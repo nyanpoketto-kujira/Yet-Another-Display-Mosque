@@ -53,7 +53,7 @@
 						<link.icon size={16} />
 						{link.name}
 					</a>
-				{each}
+				{/each}
 
 				<button
 					onclick={resetData}
