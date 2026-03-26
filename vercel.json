@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "framework": "sveltekit",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm run build",
+  "github": {
+    "silent": true
+  }
+}
