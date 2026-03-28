@@ -22,6 +22,7 @@ export interface Settings {
 	offsets: {
 		fajr: number;
 		sunrise: number;
+		dhuha: number;
 		dhuhr: number;
 		asr: number;
 		maghrib: number;
@@ -55,7 +56,7 @@ export interface Settings {
 const DEFAULT_SETTINGS: Settings = {
 	lat: -6.2,
 	lng: 106.8,
-	offsets: { fajr: 0, sunrise: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
+	offsets: { fajr: 0, sunrise: 0, dhuha: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
 	iqomah: { fajr: 10, dhuhr: 10, asr: 10, maghrib: 10, isha: 10 },
 	drift: 0,
 	cash: 0,

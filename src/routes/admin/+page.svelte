@@ -85,6 +85,7 @@
 	const prayerLabels: Record<string, string> = {
 		fajr: 'Subuh',
 		sunrise: 'Syuruq',
+		dhuha: 'Dhuha',
 		dhuhr: 'Dzuhur',
 		asr: 'Ashar',
 		maghrib: 'Maghrib',
@@ -296,7 +297,7 @@
 					<!-- Koreksi Jadwal -->
 					<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
 						<div class="mb-6 flex items-center gap-3"><Clock class="h-5 w-5 text-emerald-400" /><h2 class="text-sm font-black tracking-widest uppercase">Koreksi Jadwal Sholat (Menit)</h2></div>
-						<div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+						<div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
 							{#each offsetKeys as p}
 								<div class="rounded-2xl border border-slate-800 bg-slate-950 p-4 text-center">
 									<label for="offset-{p}" class="mb-2 block text-[10px] font-black text-slate-500 uppercase">{prayerLabels[p]}</label>
@@ -314,7 +315,7 @@
 					<!-- Tunggu Iqomah -->
 					<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
 						<div class="mb-6 flex items-center gap-3"><Timer class="h-5 w-5 text-blue-400" /><h2 class="text-sm font-black tracking-widest uppercase">Jeda Menuju Iqomah</h2></div>
-						<div class="grid grid-cols-2 gap-4 sm:grid-cols-5">
+						<div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
 							{#each iqomahKeys as p}
 								<div class="rounded-2xl border border-slate-800 bg-slate-950 p-4 text-center">
 									<label for="iqomah-{p}" class="mb-2 block text-[10px] font-black text-slate-500 uppercase">{prayerLabels[p]}</label>

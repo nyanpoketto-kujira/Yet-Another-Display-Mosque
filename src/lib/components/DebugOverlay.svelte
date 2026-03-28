@@ -21,6 +21,8 @@
 
 	const prayers = $derived([
 		{ name: 'Subuh', time: prayerService.prayerTimes.fajr },
+		{ name: 'Syuruq', time: prayerService.prayerTimes.sunrise },
+		{ name: 'Dhuha', time: prayerService.prayerTimes.dhuha },
 		{ name: 'Dzuhur', time: prayerService.prayerTimes.dhuhr },
 		{ name: 'Ashar', time: prayerService.prayerTimes.asr },
 		{ name: 'Maghrib', time: prayerService.prayerTimes.maghrib },

@@ -38,6 +38,7 @@
 		const now = prayerService.currentTime;
 		if (now < pt.fajr) return { name: 'Subuh', time: pt.fajr };
 		if (now < pt.sunrise) return { name: 'Syuruq', time: pt.sunrise };
+		if (now < pt.dhuha) return { name: 'Dhuha', time: pt.dhuha };
 		if (now < pt.dhuhr) return { name: 'Dzuhur', time: pt.dhuhr };
 		if (now < pt.asr) return { name: 'Ashar', time: pt.asr };
 		if (now < pt.maghrib) return { name: 'Maghrib', time: pt.maghrib };
@@ -383,6 +384,13 @@
 					name="Syuruq"
 					time={prayerService.prayerTimes.sunrise}
 					isActive={nextPrayer.name === 'Syuruq'}
+				/>
+			</div>
+			<div class="h-full min-w-0 flex-1">
+				<PrayerCard
+					name="Dhuha"
+					time={prayerService.prayerTimes.dhuha}
+					isActive={nextPrayer.name === 'Dhuha'}
 				/>
 			</div>
 			<div class="h-full min-w-0 flex-1">

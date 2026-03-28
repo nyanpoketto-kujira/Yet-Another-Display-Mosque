@@ -33,14 +33,15 @@ class PrayerService {
 		const params = CalculationMethod.Singapore();
 		const pt = new PrayerTimes(coords, date, params);
 
-		pt.fajr = new Date(pt.fajr.getTime() + settings.value.offsets.fajr * 60000);
-		pt.sunrise = new Date(pt.sunrise.getTime() + settings.value.offsets.sunrise * 60000);
-		pt.dhuhr = new Date(pt.dhuhr.getTime() + settings.value.offsets.dhuhr * 60000);
-		pt.asr = new Date(pt.asr.getTime() + settings.value.offsets.asr * 60000);
-		pt.maghrib = new Date(pt.maghrib.getTime() + settings.value.offsets.maghrib * 60000);
-		pt.isha = new Date(pt.isha.getTime() + settings.value.offsets.isha * 60000);
+		const fajr = new Date(pt.fajr.getTime() + (settings.value.offsets.fajr || 0) * 60000);
+		const sunrise = new Date(pt.sunrise.getTime() + (settings.value.offsets.sunrise || 0) * 60000);
+		const dhuha = new Date(sunrise.getTime() + (20 + (settings.value.offsets.dhuha || 0)) * 60000);
+		const dhuhr = new Date(pt.dhuhr.getTime() + (settings.value.offsets.dhuhr || 0) * 60000);
+		const asr = new Date(pt.asr.getTime() + (settings.value.offsets.asr || 0) * 60000);
+		const maghrib = new Date(pt.maghrib.getTime() + (settings.value.offsets.maghrib || 0) * 60000);
+		const isha = new Date(pt.isha.getTime() + (settings.value.offsets.isha || 0) * 60000);
 
-		return pt;
+		return { fajr, sunrise, dhuha, dhuhr, asr, maghrib, isha };
 	});
 
 	currentTime = $derived.by(() => {
