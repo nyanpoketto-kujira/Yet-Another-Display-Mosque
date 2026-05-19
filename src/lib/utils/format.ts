@@ -1,10 +1,11 @@
 /**
- * Format angka ke Rupiah dengan titik (Contoh: 1.000 RP)
+ * Format angka ke Rupiah dengan titik (Contoh: Rp 50.000,00)
  */
 export function formatRupiah(amount: number | string): string {
 	const num = typeof amount === 'string' ? parseInt(amount.replace(/[^0-9]/g, '')) : amount;
-	if (isNaN(num)) return '0 RP';
-	return new Intl.NumberFormat('id-ID').format(num) + ' RP';
+	const formattedCurrency = new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(num);
+	if (isNaN(num)) return '0';
+	return formattedCurrency;
 }
 
 /**
