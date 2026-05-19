@@ -475,8 +475,8 @@
 						<div class="mb-6 inline-block rounded-full bg-blue-500/10 p-6">
 							<Cpu class="h-12 w-12 text-blue-400" />
 						</div>
-						<h2 class="text-2xl font-black tracking-tighter text-white uppercase">YADM v1.0.0</h2>
-						<p class="mt-2 text-xs font-bold uppercase tracking-[0.3em] text-slate-500">Yet Another Display Mosque</p>
+						<h2 class="text-2xl font-black tracking-tighter text-white uppercase">Al-Ye'AnDiMo v1.0.6 (Hotfix)</h2>
+						<p class="mt-2 text-xs font-bold uppercase tracking-[0.3em] text-slate-500">Alhamdulillah It's Yet Another Display Mosque</p>
 						
 						<div class="my-8 h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent"></div>
 						

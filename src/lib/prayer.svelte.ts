@@ -53,13 +53,11 @@ class PrayerService {
 	});
 
 	hijriDate = $derived.by(() => {
-		return (
-			new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura-nu-latn', {
-				day: 'numeric',
-				month: 'long',
-				year: 'numeric'
-			}).format(this.currentTime) + ' H'
-		);
+		return new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura-nu-latn', {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric'
+		}).format(this.currentTime);
 	});
 
 	gregorianDate = $derived.by(() => {

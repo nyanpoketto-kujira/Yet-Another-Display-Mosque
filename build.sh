@@ -5,8 +5,8 @@ echo "🏗️  Memulai proses build YADM..."
 # 1. Bersihin folder lama (biar fresh)
 echo "🧹 Membersihkan folder lama..."
 rm -rf build runner/linux runner/windows
-mkdir -p runner/linux/data runner/linux/static
-mkdir -p runner/windows/data runner/windows/static
+mkdir -p runner/linux/data runner/linux/static/uploads
+mkdir -p runner/windows/data runner/windows/static/uploads
 
 # 2. Build SvelteKit (pake adapter-node)
 echo "📦 Menjalankan pnpm build..."

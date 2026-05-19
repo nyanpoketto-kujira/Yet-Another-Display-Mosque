@@ -6,6 +6,7 @@ dist/
 .env.*
 !.env.example
 runner/
+yadm-*.zip
 static/uploads/*
 !static/uploads/.gitkeep
 data/settings.json
