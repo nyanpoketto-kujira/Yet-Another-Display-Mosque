@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { settings } from '$lib/settings.svelte';
-	import { prayerService } from '$lib/prayer.svelte';
-	import { Clock } from 'lucide-svelte';
 
 	interface Props {
 		name: string;

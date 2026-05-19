@@ -1,4 +1,4 @@
-import { Coordinates, CalculationMethod, PrayerTimes, SunnahTimes, Prayer } from 'adhan';
+import { Coordinates, CalculationMethod, PrayerTimes, Prayer } from 'adhan';
 import { settings } from './settings.svelte';
 import { browser } from '$app/environment';
 

@@ -10,15 +10,15 @@
 
 ## Commands
 
-| Command | Purpose |
-|---|---|
-| `pnpm dev` | Vite dev server (ignores `data/` changes in watch) |
-| `pnpm build` | Vite build → `build/` (Node adapter output) |
+| Command         | Purpose                                                                                              |
+| --------------- | ---------------------------------------------------------------------------------------------------- |
+| `pnpm dev`      | Vite dev server (ignores `data/` changes in watch)                                                   |
+| `pnpm build`    | Vite build → `build/` (Node adapter output)                                                          |
 | `bash build.sh` | Full runner build: `pnpm build` → copies to `runner/linux/` and `runner/windows/` with start scripts |
-| `pnpm check` | `svelte-kit sync && svelte-check` (must run together) |
-| `pnpm lint` | `prettier --check . && eslint .` |
-| `pnpm format` | `prettier --write .` |
-| `pnpm install` | Install deps |
+| `pnpm check`    | `svelte-kit sync && svelte-check` (must run together)                                                |
+| `pnpm lint`     | `prettier --check . && eslint .`                                                                     |
+| `pnpm format`   | `prettier --write .`                                                                                 |
+| `pnpm install`  | Install deps                                                                                         |
 
 **No pre-commit hooks, no CI, no tests.**
 
@@ -31,14 +31,14 @@
 
 ## Routes
 
-| Route | Purpose |
-|---|---|
-| `/` | Main display (fullscreen 1080p, bento grid) |
-| `/admin` | Admin panel — default password `vibe-masjid`, auth in `sessionStorage('admin-yadm-auth')` |
-| `/kas` | Cash management page |
-| `/api/settings` | GET/POST JSON settings |
-| `/api/upload` | POST upload / DELETE background images |
-| `/api/events` | SSE endpoint (keepalive ping every 20s) |
+| Route           | Purpose                                                                                   |
+| --------------- | ----------------------------------------------------------------------------------------- |
+| `/`             | Main display (fullscreen 1080p, bento grid)                                               |
+| `/admin`        | Admin panel — default password `vibe-masjid`, auth in `sessionStorage('admin-yadm-auth')` |
+| `/kas`          | Cash management page                                                                      |
+| `/api/settings` | GET/POST JSON settings                                                                    |
+| `/api/upload`   | POST upload / DELETE background images                                                    |
+| `/api/events`   | SSE endpoint (keepalive ping every 20s)                                                   |
 
 ## Architecture quirks
 

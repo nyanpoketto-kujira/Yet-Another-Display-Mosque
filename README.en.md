@@ -29,35 +29,37 @@
 <summary><b>✨ Click to view display gallery (Main Display & Admin Panel)</b></summary>
 
 ### 📺 Main Display (TV View)
+
 Elegant and informative main display for the congregation.
 
-| Main Dashboard | Adhan Mode |
-| :---: | :---: |
+|            Main Dashboard             |             Adhan Mode             |
+| :-----------------------------------: | :--------------------------------: |
 | ![Main Display](img/main-display.png) | ![Azan](img/main-display-azan.png) |
-| *Main Dashboard* | *Adhan Notification* |
+|           _Main Dashboard_            |        _Adhan Notification_        |
 
-| Iqomah Mode | Prayer Mode |
-| :---: | :---: |
+|              Iqomah Mode               |              Prayer Mode               |
+| :------------------------------------: | :------------------------------------: |
 | ![Iqomah](img/main-display-iqomah.png) | ![Shalat](img/main-display-shalat.png) |
-| *Iqomah Countdown* | *Prayer Instruction Screen* |
+|           _Iqomah Countdown_           |      _Prayer Instruction Screen_       |
 
-| Friday Mode | Khutbah Mode |
-| :---: | :---: |
+|             Friday Mode              |               Khutbah Mode               |
+| :----------------------------------: | :--------------------------------------: |
 | ![Jumat](img/main-display-jumat.png) | ![Khutbah](img/main-display-khutbah.png) |
-| *Khatib & Muazin Info* | *Friday Khutbah Timer* |
+|        _Khatib & Muazin Info_        |          _Friday Khutbah Timer_          |
 
 ### 📱 Admin Panel (Settings)
+
 Manage all display content easily via Mobile or PC.
 
-| Desktop (Admin) | Mobile (Admin) |
-| :---: | :---: |
+|            Desktop (Admin)            |            Mobile (Admin)             |
+| :-----------------------------------: | :-----------------------------------: |
 | ![Admin PC](img/admin-pc-general.png) | ![Admin HP](img/admin-hp-general.jpg) |
-| *Settings via Desktop* | *Responsive on Mobile* |
+|        _Settings via Desktop_         |        _Responsive on Mobile_         |
 
-| Cash Management | Lock Screen |
-| :---: | :---: |
+|       Cash Management        |          Lock Screen           |
+| :--------------------------: | :----------------------------: |
 | ![Kas](img/admin-pc-kas.png) | ![Lock](img/admin-pc-lock.png) |
-| *Financial Transparency* | *Panel Access Security* |
+|   _Financial Transparency_   |    _Panel Access Security_     |
 
 </details>
 
@@ -82,17 +84,20 @@ If you don't want to build from source code, you can download the ready-made run
 ## 🛠️ Development (For Developers)
 
 1. **Clone Repository**
+
    ```bash
    git clone https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque.git
    cd Yet-Another-Display-Mosque
    ```
 
 2. **Install Dependencies**
+
    ```bash
    pnpm install
    ```
 
 3. **Run Development Mode**
+
    ```bash
    pnpm dev
    ```
@@ -107,4 +112,5 @@ If you don't want to build from source code, you can download the ready-made run
 This project is under the MIT License. Feel free to use and modify for the benefit of the community.
 
 ---
+
 Made with ❤️ by [nyanpoketto-kujira](https://github.com/nyanpoketto-kujira)

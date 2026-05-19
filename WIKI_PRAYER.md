@@ -14,13 +14,13 @@ YADM menggunakan library [adhan-js](https://github.com/batoulapps/adhan-js) deng
 
 Layar utama (`Main Display`) secara otomatis berpindah mode berdasarkan waktu sholat saat ini:
 
-| Mode | Kondisi Pemicu | Tampilan |
-| :--- | :--- | :--- |
-| **Normal** | Waktu di luar jadwal sholat/pre-adzan. | Slideshow, Jadwal Sholat, Info Kas. |
-| **Pre-Adzan** | `Settings.preAdzanDuration` menit sebelum Adzan. | Countdown besar menuju waktu sholat. |
-| **Iqomah** | Setelah Adzan hingga `Settings.iqomah` menit. | Hitung mundur Iqomah (siap-siap sholat). |
-| **Sholat** | Setelah Iqomah hingga `Settings.sholatDuration` menit. | Layar instruksi (HP Mati, Luruskan Shaf). |
-| **Khutbah** | Khusus hari Jum'at saat Adzan Dzuhur. | Nama Khathib dan Timer durasi khutbah. |
+| Mode          | Kondisi Pemicu                                         | Tampilan                                  |
+| :------------ | :----------------------------------------------------- | :---------------------------------------- |
+| **Normal**    | Waktu di luar jadwal sholat/pre-adzan.                 | Slideshow, Jadwal Sholat, Info Kas.       |
+| **Pre-Adzan** | `Settings.preAdzanDuration` menit sebelum Adzan.       | Countdown besar menuju waktu sholat.      |
+| **Iqomah**    | Setelah Adzan hingga `Settings.iqomah` menit.          | Hitung mundur Iqomah (siap-siap sholat).  |
+| **Sholat**    | Setelah Iqomah hingga `Settings.sholatDuration` menit. | Layar instruksi (HP Mati, Luruskan Shaf). |
+| **Khutbah**   | Khusus hari Jum'at saat Adzan Dzuhur.                  | Nama Khathib dan Timer durasi khutbah.    |
 
 ## 📅 Kalender Hijriah
 
@@ -29,6 +29,7 @@ Konversi tanggal Hijriah dilakukan secara dinamis menggunakan library `moment-hi
 ## 🛠️ Debug & QA (Mode Simulasi)
 
 Developer dapat memicu mode simulasi untuk mengecek tampilan tanpa harus menunggu waktu sholat tiba:
+
 1. Masuk ke Panel Admin.
 2. Gunakan **Debug Overlay** (jika diaktifkan di development) untuk mengganti mode atau mempercepat waktu.
 3. Gunakan properti `drift` di `settings.json` untuk menyesuaikan jam display dengan jam server jika terjadi sinkronisasi yang buruk.

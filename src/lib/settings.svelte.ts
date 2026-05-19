@@ -60,7 +60,8 @@ const DEFAULT_SETTINGS: Settings = {
 	iqomah: { fajr: 10, dhuhr: 10, asr: 10, maghrib: 10, isha: 10 },
 	drift: 0,
 	cash: 0,
-	runningText: 'YADM (Yet Another Display Mosque) - Selamat datang jamaah sekalian. Mari rapatkan shaf.',
+	runningText:
+		'YADM (Yet Another Display Mosque) - Selamat datang jamaah sekalian. Mari rapatkan shaf.',
 	bigInfo: '',
 	infos: [
 		{

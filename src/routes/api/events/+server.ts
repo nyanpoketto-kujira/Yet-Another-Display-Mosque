@@ -10,7 +10,7 @@ export const GET = async () => {
 			unsubscribe = eventManager.subscribe(() => {
 				try {
 					controller.enqueue(`data: update\n\n`);
-				} catch (e) {
+				} catch {
 					// Client udah kabur
 				}
 			});
@@ -19,7 +19,7 @@ export const GET = async () => {
 			interval = setInterval(() => {
 				try {
 					controller.enqueue(`: ping\n\n`);
-				} catch (e) {
+				} catch {
 					clearInterval(interval);
 				}
 			}, 20000);
@@ -34,7 +34,7 @@ export const GET = async () => {
 		headers: {
 			'Content-Type': 'text/event-stream',
 			'Cache-Control': 'no-cache',
-			'Connection': 'keep-alive'
+			Connection: 'keep-alive'
 		}
 	});
 };

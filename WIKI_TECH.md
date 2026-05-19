@@ -4,7 +4,7 @@ Bagian ini menjelaskan arsitektur sistem dan bagaimana komponen-komponen utama s
 
 ## 📡 Sinkronisasi Real-Time (SSE)
 
-YADM menggunakan **Server-Sent Events (SSE)** untuk menjaga sinkronisasi antara **Panel Admin** dan **Main Display**. Berbeda dengan *polling* atau *websocket*, SSE lebih ringan dan searah (Server ke Client), sangat cocok untuk display pasif seperti TV Masjid.
+YADM menggunakan **Server-Sent Events (SSE)** untuk menjaga sinkronisasi antara **Panel Admin** dan **Main Display**. Berbeda dengan _polling_ atau _websocket_, SSE lebih ringan dan searah (Server ke Client), sangat cocok untuk display pasif seperti TV Masjid.
 
 - **Endpoint**: `/api/events`
 - **Mekanisme**:
@@ -23,11 +23,13 @@ Sistem ini sepenuhnya menggunakan **Svelte 5 Runes** (`$state`, `$derived`, `$ef
 ## 💾 Persistensi Data
 
 Semua pengaturan disimpan dalam format JSON di folder `data/settings.json`.
+
 - **Upload Gambar**: Aset gambar latar belakang disimpan di folder `static/uploads/` dan didaftarkan di dalam array `backgrounds` di `settings.json`.
 - **Manajemen Kas**: Transaksi kas disimpan sebagai array objek di dalam `settings.json` untuk kemudahan backup (cukup salin satu file).
 
 ## 🎨 Tema & Gaya (TailwindCSS)
 
 Tampilan visual dikontrol melalui class Tailwind yang dinamis:
+
 - Variabel `vibe` di `PrayerService` menentukan warna gradasi latar belakang berdasarkan waktu (Subuh, Pagi, Siang, dll).
 - Tema besar (`vibe`, `modern`, `classic`, dll) mengubah struktur layout dan font secara keseluruhan di `+layout.svelte`.

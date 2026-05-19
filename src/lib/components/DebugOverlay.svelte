@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { prayerService } from '$lib/prayer.svelte';
-	import { settings } from '$lib/settings.svelte';
-	import { X, Play, RefreshCw, Timer, Zap, Clock, ShieldCheck, Beaker } from 'lucide-svelte';
-	import { fade, slide } from 'svelte/transition';
+	import { X, RefreshCw, Zap, Clock, ShieldCheck, Beaker } from 'lucide-svelte';
+	import { slide } from 'svelte/transition';
 
 	let { onClose } = $props();
 
@@ -31,7 +30,7 @@
 </script>
 
 <div
-	class="fixed top-6 right-6 z-[999] w-80 max-h-[90vh] overflow-y-auto no-scrollbar rounded-[2rem] border border-white/10 bg-slate-900/90 p-6 text-white shadow-2xl backdrop-blur-2xl"
+	class="no-scrollbar fixed top-6 right-6 z-[999] max-h-[90vh] w-80 overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900/90 p-6 text-white shadow-2xl backdrop-blur-2xl"
 	transition:slide={{ axis: 'y' }}
 >
 	<div class="mb-6 flex items-center justify-between">
@@ -54,8 +53,14 @@
 				{prayerService.currentTime.toLocaleTimeString('id-ID')}
 			</p>
 			<div class="mt-2 flex items-center gap-2">
-				<ShieldCheck class="h-3 w-3 {prayerService.isFriday ? 'text-purple-400' : 'text-slate-600'}" />
-				<span class="text-[9px] font-black uppercase {prayerService.isFriday ? 'text-purple-400' : 'text-slate-600'}">
+				<ShieldCheck
+					class="h-3 w-3 {prayerService.isFriday ? 'text-purple-400' : 'text-slate-600'}"
+				/>
+				<span
+					class="text-[9px] font-black uppercase {prayerService.isFriday
+						? 'text-purple-400'
+						: 'text-slate-600'}"
+				>
 					{prayerService.isFriday ? 'Mode Hari Jumat' : 'Hari Biasa'}
 				</span>
 			</div>
@@ -81,7 +86,9 @@
 
 		<!-- Force Mode (QA) -->
 		<div class="space-y-2">
-			<p class="text-[10px] font-black tracking-widest text-slate-500 uppercase">Force Mode Overlay</p>
+			<p class="text-[10px] font-black tracking-widest text-slate-500 uppercase">
+				Force Mode Overlay
+			</p>
 			<div class="grid grid-cols-2 gap-2">
 				<button
 					onclick={() => prayerService.setDebugMode('khutbah', 60)}
@@ -108,7 +115,7 @@
 				<Clock class="h-3 w-3" /> Quick Jump
 			</p>
 
-			{#each prayers as p}
+			{#each prayers as p (p.name)}
 				<div class="grid grid-cols-1 gap-2 rounded-2xl border border-white/5 bg-white/5 p-3">
 					<div class="mb-1 flex items-center justify-between">
 						<span class="text-[10px] font-black text-white/60 uppercase">
@@ -139,6 +146,11 @@
 </div>
 
 <style>
-	.no-scrollbar::-webkit-scrollbar { display: none; }
-	.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+	.no-scrollbar {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
 </style>
