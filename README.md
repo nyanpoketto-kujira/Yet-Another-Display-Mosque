@@ -81,20 +81,25 @@ Kelola semua konten display dengan mudah melalui HP atau PC.
 - **Icons**: [Lucide Svelte](https://lucide.dev/)
 - **Communication**: Server-Sent Events (SSE)
 
-## 🚀 Panduan Instalasi & Pengaturan
+## 🚀 Instalasi & Panduan Lengkap
 
-Untuk pengurus masjid yang ingin memasang sistem ini di layar display, silakan baca panduan lengkapnya di:
+👉 **[INSTALL.md — Panduan Instalasi Lengkap](INSTALL.md)**
 
-👉 **[PANDUAN INSTALASI & SETUP (MOSQUE_INSTALL.md)](MOSQUE_INSTALL.md)**
+Cakupannya:
+- **Quick Start (3 menit)** — langsung jalan, cocok untuk pengurus masjid
+- **Android TV (Termux)** — pasang di Mibox, Xiaomi TV Stick, dll
+- **Linux (systemd)** — PC, Raspberry Pi, NUC
+- **Windows** — PC/Laptop
+- **Setup Autorun & Mode Kiosk** — biar otomatis fullscreen saat boot
+- **Panduan Keyboard** — navigasi di mode kiosk
+- **Pengaturan Display** — jadwal sholat, password, background
+- **Update & Troubleshooting**
 
-## 📦 Download & Instalasi
+### Cara Paling Cepat
 
-### Pengguna Baru?
-1. Download file ZIP dari **[halaman Releases](https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases)** sesuai OS Anda
-2. Ekstrak dan jalankan `start.sh` (Linux) atau `start.bat` (Windows)
-3. Buka `http://localhost:3000` di browser
-
-👉 Lihat panduan lengkap → **[INSTALL.md](INSTALL.md)** (cara pasang di Android TV, Linux, Windows)
+1. Download ZIP dari **[halaman Releases](https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases)**
+2. Ekstrak, jalankan `start.sh` (Linux) / `start.bat` (Windows)
+3. Buka `http://localhost:3000`
 
 ### Update ke Versi Baru
 
