@@ -20,9 +20,7 @@
 <div
 	class="w-full overflow-hidden rounded-2xl border-t py-1 text-white backdrop-blur-md {themeClasses}"
 >
-	<div class="animate-marquee text2-xl font-medium whitespace-nowrap">
-		<span class="px-4">{settings.value.runningText}</span>
-		<span class="px-4">{settings.value.runningText}</span>
+	<div class="animate-marquee flex whitespace-nowrap will-change-transform">
 		<span class="px-4">{settings.value.runningText}</span>
 		<span class="px-4">{settings.value.runningText}</span>
 	</div>
@@ -41,5 +39,9 @@
 		to {
 			transform: translateX(-33.33%);
 		}
+	}
+
+	:global(.perf-minimal) .animate-marquee {
+		animation: none !important;
 	}
 </style>

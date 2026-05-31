@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { prayerService } from '$lib/prayer.svelte';
+	import { settings } from '$lib/settings.svelte';
 	import { fade, scale } from 'svelte/transition';
 
 	function formatTime(seconds: number | null) {
@@ -20,7 +21,7 @@
 </script>
 
 <div
-	class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/60 text-white backdrop-blur-[100px]"
+	class="fixed inset-0 z-50 flex flex-col items-center justify-center {settings.value.performanceMode === 'minimal' ? 'bg-black' : 'bg-black/60 backdrop-blur-[100px]'} text-white"
 	transition:fade
 >
 	<div
@@ -57,5 +58,12 @@
 	}
 	.animate-heartbeat {
 		animation: heartbeat 1s ease-in-out infinite;
+	}
+
+	:global(.perf-minimal) .animate-heartbeat {
+		animation: none !important;
+	}
+	:global(.perf-minimal) .drop-shadow-\[0_0_100px_rgba\(255\,255\,255\,0\.2\)\] {
+		filter: none !important;
 	}
 </style>

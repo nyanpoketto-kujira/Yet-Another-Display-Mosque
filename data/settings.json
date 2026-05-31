@@ -63,5 +63,20 @@
   "fridayKhatib": "Ustadz Ahmad Fulan",
   "fridayKhutbahDuration": 20,
   "hideTransactionAmount": false,
-  "theme": "classic"
+  "theme": "classic",
+  "sound": {
+    "preadzan": {
+      "enabled": true,
+      "file": "/sounds/universfield-new-notification-022-370046.mp3"
+    },
+    "azan": {
+      "enabled": true,
+      "file": "/sounds/universfield-new-notification-036-485897.mp3"
+    },
+    "iqomah": {
+      "enabled": true,
+      "file": "/sounds/u_edtmwfwu7c-beep-329314.mp3"
+    }
+  },
+  "performanceMode": "penuh"
 }

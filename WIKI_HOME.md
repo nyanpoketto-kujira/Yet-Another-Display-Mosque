@@ -4,10 +4,8 @@ Selamat datang di Wiki teknis **YADM**. Proyek ini adalah sistem display informa
 
 ## 📖 Navigasi Wiki
 
-1. [Ringkasan Teknis](./Technical-Overview.md) - Cara kerja sistem, SSE, dan state management.
-2. [Dokumentasi API](./API-Documentation.md) - Endpoint yang tersedia untuk integrasi eksternal.
-3. [Panduan Pengembang](./Developer-Guide.md) - Cara setup environment, build, dan berkontribusi.
-4. [Logika Jadwal Sholat](./Prayer-Logic.md) - Detail kalkulasi waktu sholat dan mode display.
+1. [Ringkasan Teknis](./WIKI_TECH.md) — Cara kerja sistem, SSE, dan state management.
+2. [Logika Jadwal Sholat](./WIKI_PRAYER.md) — Detail kalkulasi waktu sholat dan mode display.
 
 ---
 

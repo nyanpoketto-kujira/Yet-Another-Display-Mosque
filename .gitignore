@@ -12,3 +12,16 @@ static/uploads/*
 data/settings.json
 pnpm-debug.log*
 .DS_Store
+
+# Auto-update artifacts
+.apply-*
+.backup-*
+
+# Playwright test artifacts
+.playwright-mcp/
+
+# Backup files
+data/*.bak
+
+# Log files
+*.log

@@ -37,9 +37,14 @@
 		if (len > 10) return 'text-7xl md:text-[12rem]';
 		return 'text-8xl md:text-[15rem]';
 	});
+
+	const perfClass = $derived(
+		settings.value.performanceMode === 'ringan' ? 'perf-ringan' :
+		settings.value.performanceMode === 'minimal' ? 'perf-minimal' : ''
+	);
 </script>
 
-<div class="min-h-screen overflow-hidden bg-emerald-950 p-6 font-sans text-white md:p-12">
+<div class="min-h-screen overflow-hidden bg-emerald-950 p-6 font-sans text-white md:p-12 {perfClass}">
 	<header class="mx-auto mb-12 flex max-w-6xl items-center justify-between">
 		<div class="flex items-center gap-4 md:gap-6">
 			<button
@@ -129,5 +134,46 @@
 	:global(body) {
 		margin: 0;
 		background: #022c22;
+	}
+
+	/* --- Performance Mode: Ringan --- */
+	:global(.perf-ringan) :global(.backdrop-blur-3xl),
+	:global(.perf-ringan) :global(.backdrop-blur-md) {
+		backdrop-filter: none !important;
+		-webkit-backdrop-filter: none !important;
+	}
+	:global(.perf-ringan) :global(.blur-\[150px\]) {
+		display: none !important;
+	}
+	:global(.perf-ringan) :global(.shadow-\[0_0_100px_rgba\(16\,185\,129\,0\.05\)\]) {
+		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3) !important;
+	}
+	:global(.perf-ringan) :global(.shadow-xl) {
+		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3) !important;
+	}
+
+	/* --- Performance Mode: Minimal --- */
+	:global(.perf-minimal) :global(.backdrop-blur-3xl),
+	:global(.perf-minimal) :global(.backdrop-blur-md) {
+		backdrop-filter: none !important;
+		-webkit-backdrop-filter: none !important;
+	}
+	:global(.perf-minimal) :global(.blur-\[150px\]) {
+		display: none !important;
+	}
+	:global(.perf-minimal) :global(.shadow-\[0_0_100px_rgba\(16\,185\,129\,0\.05\)\]),
+	:global(.perf-minimal) :global(.shadow-xl) {
+		box-shadow: none !important;
+	}
+	:global(.perf-minimal) :global(.drop-shadow-\[0_10px_40px_rgba\(0\,0\,0\,0\.5\)\]) {
+		filter: none !important;
+	}
+	:global(.perf-minimal) :global(.transition-all) {
+		transition: none !important;
+	}
+	:global(.perf-minimal) .bg-emerald-900\/50,
+	:global(.perf-minimal) .bg-emerald-900\/20,
+	:global(.perf-minimal) .bg-emerald-900\/10 {
+		background: rgba(2, 44, 34, 0.9) !important;
 	}
 </style>

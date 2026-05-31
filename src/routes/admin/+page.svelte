@@ -1,7 +1,10 @@
 <script lang="ts">
-	import { settings, type Settings, type Transaction, type InfoItem } from '$lib/settings.svelte';
+	import type { Settings, Transaction, InfoItem } from '$lib/types';
+	import { settings } from '$lib/settings.svelte';
+	import { soundManager } from '$lib/sound.svelte';
 	import { prayerService } from '$lib/prayer.svelte';
 	import { formatRupiah, parseRaw } from '$lib/utils/format';
+	import { login as authLogin, logout as authLogout, getToken, isAuthenticated } from '$lib/auth';
 	import {
 		ArrowLeft,
 		Save,
@@ -25,58 +28,87 @@
 		Palette,
 		CircleCheck,
 		CircleX,
+  RefreshCw,
+  Download,
 		MessageSquarePlus,
 		Timer,
 		Info,
 		Zap,
 		Cpu,
 		Computer,
-		Heart
+		Heart,
+		Volume2,
+		Play,
+		Activity,
+		Check,
+		X
 	} from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
-	let isAuthenticated = $state(browser && sessionStorage.getItem('admin-yadm-auth') === 'true');
+	let isAuthenticatedState = $state(browser && isAuthenticated());
 	let passwordInput = $state('');
 	let showPass = $state(false);
+	let loginError = $state('');
+	let toastMessage = $state('');
+	let toastType = $state<'success' | 'error' | 'info'>('success');
+	let toastVisible = $state(false);
+	let toastTimer: ReturnType<typeof setTimeout> | null = null;
+
+	function showToast(msg: string, type: 'success' | 'error' | 'info' = 'success') {
+		if (toastTimer) clearTimeout(toastTimer);
+		toastMessage = msg;
+		toastType = type;
+		toastVisible = true;
+		toastTimer = setTimeout(() => { toastVisible = false; }, 3000);
+	}
 
 	onMount(() => {
 		settings.load();
 	});
 
-	function checkPassword() {
-		if (passwordInput === settings.value.adminPassword) {
-			isAuthenticated = true;
-			if (browser) sessionStorage.setItem('admin-yadm-auth', 'true');
+	async function checkPassword() {
+		loginError = '';
+		const ok = await authLogin(passwordInput);
+		if (ok) {
+			isAuthenticatedState = true;
+			passwordInput = '';
 		} else {
+			loginError = 'Kata sandi salah!';
 			passwordInput = '';
 		}
 	}
 
 	function logout() {
-		if (confirm('Apakah Anda yakin ingin keluar dari Panel Admin?')) {
-			isAuthenticated = false;
-			if (browser) sessionStorage.removeItem('admin-yadm-auth');
-		}
+		authLogout();
+		isAuthenticatedState = false;
 	}
 
 	function goToHome() {
 		window.location.href = '/';
 	}
 
-	let activeTab = $state<'umum' | 'kas' | 'jadwal' | 'teks' | 'bg' | 'about'>('umum');
+	let activeTab = $state<'umum' | 'kas' | 'jadwal' | 'teks' | 'suara' | 'status' | 'bg' | 'about'>(
+		'umum'
+	);
+let updateStatus = $state<'idle' | 'checking' | 'available' | 'latest' | 'error' | 'applying'>('idle');
+let latestVersion = $state('');
+let latestUrl = $state('');
+let releaseNotes = $state('');
+let updateError = $state('');
 
 	const tabs = [
 		{ id: 'umum', label: 'Umum', icon: SettingsIcon },
 		{ id: 'kas', label: 'Kas', icon: Wallet },
 		{ id: 'jadwal', label: 'Jadwal', icon: Clock },
 		{ id: 'teks', label: 'Info', icon: Type },
+		{ id: 'suara', label: 'Suara', icon: Volume2 },
+		{ id: 'status', label: 'Status', icon: Activity },
 		{ id: 'bg', label: 'BG', icon: ImageIcon },
 		{ id: 'about', label: 'About', icon: Cpu }
 	] as const;
 
-	// Mapping Label Bahasa Indonesia
 	const prayerLabels: Record<string, string> = {
 		fajr: 'Subuh',
 		sunrise: 'Syuruq',
@@ -121,6 +153,7 @@
 		settings.update({ transactions: currentTxs, cash: newBalance });
 		txDesc = '';
 		txAmountInput = '';
+		showToast('Transaksi berhasil ditambahkan', 'success');
 	}
 
 	function removeTransaction(id: string) {
@@ -133,6 +166,7 @@
 			transactions: settings.value.transactions.filter((t) => t.id !== id),
 			cash: newBalance
 		});
+		showToast('Transaksi dihapus', 'info');
 	}
 
 	// INFO MANAGEMENT
@@ -153,6 +187,7 @@
 		newInfoHeader = '';
 		newInfoContent = '';
 		newInfoFooter = '';
+		showToast('Informasi berhasil ditambahkan', 'success');
 	}
 
 	function toggleInfo(id: string) {
@@ -165,6 +200,7 @@
 	function deleteInfo(id: string) {
 		if (!confirm('Hapus informasi ini?')) return;
 		settings.update({ infos: settings.value.infos.filter((i) => i.id !== id) });
+		showToast('Informasi dihapus', 'info');
 	}
 
 	// Background Management
@@ -177,13 +213,17 @@
 		const formData = new FormData();
 		formData.append('file', file);
 		try {
-			const res = await fetch('/api/upload', { method: 'POST', body: formData });
+			const token = getToken();
+			const headers: Record<string, string> = {};
+			if (token) headers['Authorization'] = `Bearer ${token}`;
+			const res = await fetch('/api/upload', { method: 'POST', body: formData, headers });
 			const data = await res.json();
 			if (data.fileName) {
 				settings.update({ backgrounds: [...settings.value.backgrounds, data.fileName] });
+				showToast('Gambar berhasil diupload', 'success');
 			}
 		} catch {
-			alert('Maaf, gagal mengunggah gambar.');
+			showToast('Maaf, gagal mengunggah gambar.', 'error');
 		} finally {
 			isUploading = false;
 		}
@@ -192,20 +232,89 @@
 	async function removeBg(path: string) {
 		if (!confirm('Hapus gambar ini dari koleksi background?')) return;
 		try {
+			const token = getToken();
+			const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+			if (token) headers['Authorization'] = `Bearer ${token}`;
 			await fetch('/api/upload', {
 				method: 'DELETE',
-				headers: { 'Content-Type': 'application/json' },
+				headers,
 				body: JSON.stringify({ fileName: path })
 			});
 			settings.update({ backgrounds: settings.value.backgrounds.filter((bg) => bg !== path) });
+			showToast('Gambar berhasil dihapus', 'success');
 		} catch {
-			alert('Gagal menghapus gambar.');
+			showToast('Gagal menghapus gambar.', 'error');
 		}
 	}
 
 	async function handleSave() {
 		await settings.save();
-		alert('Alhamdulillah, semua perubahan berhasil disimpan.');
+		showToast('Alhamdulillah, semua perubahan berhasil disimpan.', 'success');
+	}
+
+	function testSound(file: string) {
+		soundManager.init();
+		soundManager.unlock();
+		soundManager.play(file);
+	}
+
+	interface ServerStatus {
+		platform: string;
+		arch: string;
+		cpus: number;
+		loadAvg: number[];
+		memory: { total: number; free: number; used: number; usagePercent: number };
+		processUptime: number;
+		heap: number;
+	}
+
+	let serverStatus = $state<ServerStatus | null>(null);
+	let statusTimer: ReturnType<typeof setInterval> | null = null;
+
+	async function fetchStatus() {
+		try {
+			const token = getToken();
+			const headers: Record<string, string> = {};
+			if (token) headers['Authorization'] = `Bearer ${token}`;
+			const res = await fetch('/api/status', { headers });
+			if (res.ok) serverStatus = await res.json();
+		} catch {
+			// ignore
+		}
+	}
+
+	$effect(() => {
+		if (activeTab === 'status') {
+			fetchStatus();
+			statusTimer = setInterval(fetchStatus, 5000);
+			return () => {
+				if (statusTimer) clearInterval(statusTimer);
+			};
+		}
+	});
+
+	function fmtBytes(bytes: number) {
+		const units = ['B', 'KB', 'MB', 'GB'];
+		let i = 0;
+		let val = bytes;
+		while (val >= 1024 && i < units.length - 1) {
+			val /= 1024;
+			i++;
+		}
+		return `${val.toFixed(1)} ${units[i]}`;
+	}
+
+	function fmtUptime(sec: number) {
+		const d = Math.floor(sec / 86400);
+		const h = Math.floor((sec % 86400) / 3600);
+		const m = Math.floor((sec % 3600) / 60);
+		const s = Math.floor(sec % 60);
+		const parts = [];
+		if (d > 0) parts.push(`${d}h`);
+		if (h > 0) parts.push(`${h}j`);
+		if (m > 0) parts.push(`${m}m`);
+		parts.push(`${s}d`);
+		return parts.join(' ');
 	}
 
 	const offsetKeys = $derived(
@@ -214,14 +323,78 @@
 	const iqomahKeys = $derived(
 		settings.value ? (Object.keys(settings.value.iqomah) as (keyof Settings['iqomah'])[]) : []
 	);
+
+async function checkUpdate() {
+    updateStatus = 'checking';
+    updateError = '';
+    try {
+        const res = await fetch(
+            'https://api.github.com/repos/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases/latest',
+            { signal: AbortSignal.timeout(10000) }
+        );
+        if (!res.ok) throw new Error('Gagal hubungi GitHub');
+        const data = await res.json();
+        const current = 'v1.1.0';
+        const latest = data.tag_name || '';
+        latestVersion = latest;
+        latestUrl = data.html_url || '';
+        releaseNotes = data.body || '';
+
+        // Compare versions numerically (semver, left-to-right)
+        const parseVer = (v: string) => v.replace(/^v/, '').split('.').map(Number);
+        const currentParts = parseVer(current);
+        const latestParts = parseVer(latest);
+        let isLatest = true;
+        for (let i = 0; i < Math.max(currentParts.length, latestParts.length); i++) {
+            const cur = currentParts[i] ?? 0;
+            const lat = latestParts[i] ?? 0;
+            if (lat > cur) { isLatest = false; break; }
+            if (cur > lat) { break; }
+        }
+        if (isLatest) {
+            updateStatus = 'latest';
+        } else if (latest) {
+            updateStatus = 'available';
+        } else {
+            throw new Error('Tidak dapat membaca versi');
+        }
+    } catch (e) {
+        updateStatus = 'error';
+        updateError = e instanceof Error ? e.message : 'Koneksi gagal';
+    }
+}
+
+async function applyUpdate() {
+	if (!latestVersion) return;
+	updateStatus = 'applying';
+	try {
+		const token = getToken();
+		const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+		if (token) headers['Authorization'] = `Bearer ${token}`;
+
+		const res = await fetch('/api/update', {
+			method: 'POST',
+			headers,
+			body: JSON.stringify({ version: latestVersion })
+		});
+		if (!res.ok) {
+			const err = await res.json().catch(() => ({}));
+			throw new Error(err.error || 'Gagal memasang update');
+		}
+		// Server akan restart — tunggu beberapa detik lalu reload
+		setTimeout(() => {
+			window.location.reload();
+		}, 8000);
+	} catch (e) {
+		updateStatus = 'available';
+		const msg = e instanceof Error ? e.message : 'Gagal memasang update';
+		showToast(msg, 'error');
+	}
+}
 </script>
 
 <div class="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
-	{#if !settings.value}
-		<div class="flex min-h-screen items-center justify-center">
-			<div class="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500"></div>
-		</div>
-	{:else if !isAuthenticated}
+	{#if !isAuthenticatedState}
 		<div class="flex min-h-screen items-center justify-center p-4" transition:fade>
 			<div
 				class="w-full max-w-md rounded-[2rem] border border-slate-800 bg-slate-900 p-8 text-center shadow-2xl md:p-10"
@@ -249,6 +422,9 @@
 							{#if showPass}<EyeOff class="h-5 w-5" />{:else}<Eye class="h-5 w-5" />{/if}
 						</button>
 					</div>
+					{#if loginError}
+						<p class="text-xs font-bold text-rose-400">{loginError}</p>
+					{/if}
 					<button
 						onclick={checkPassword}
 						class="w-full rounded-xl bg-blue-600 p-4 text-center text-sm font-black tracking-widest text-white uppercase shadow-lg transition-all hover:bg-blue-500 active:scale-95"
@@ -546,7 +722,7 @@
 								>
 								<input
 									id="friday-khatib"
-									type="text"
+									type="password"
 									bind:value={settings.value.fridayKhatib}
 									placeholder="Nama Khathib..."
 									class="w-full rounded-xl border border-slate-800 bg-slate-900 p-4 text-sm font-bold outline-none focus:ring-2 focus:ring-purple-500"
@@ -760,10 +936,39 @@
 						>
 						<input
 							id="admin-password"
-							type="text"
+							type="password"
 							bind:value={settings.value.adminPassword}
 							class="w-full rounded-xl border border-slate-800 bg-slate-950 p-4 text-center font-mono text-sm"
 						/>
+					</section>
+					<!-- Mode Tampilan -->
+					<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 text-center shadow-xl">
+						<div class="mb-6 flex items-center justify-center gap-3">
+							<Zap class="h-5 w-5 text-amber-400" />
+							<h2 class="text-sm font-black tracking-widest uppercase">Mode Tampilan</h2>
+						</div>
+						<p class="mb-6 text-[10px] leading-relaxed text-slate-500">
+							Untuk perangkat spek rendah (Android TV box, RAM kecil), pilih 'Ringan' atau 'Minimal' agar display tetap berjalan mulus.
+						</p>
+						<div class="grid grid-cols-3 gap-3">
+							{#each [
+								{ id: 'penuh', label: 'Penuh', desc: 'Semua efek visual', icon: 'bg-gradient-to-br from-blue-600 to-purple-600' },
+								{ id: 'ringan', label: 'Ringan', desc: 'Tanpa efek kaca', icon: 'bg-gradient-to-br from-amber-500 to-orange-500' },
+								{ id: 'minimal', label: 'Minimal', desc: 'Hanya teks & warna solid', icon: 'bg-gradient-to-br from-slate-500 to-slate-700' }
+							] as item}
+								<button
+									onclick={() => (settings.value.performanceMode = item.id as Settings['performanceMode'])}
+									class="relative overflow-hidden rounded-2xl border-2 p-4 transition-all {settings.value.performanceMode === item.id ? 'scale-105 border-amber-400 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'}"
+								>
+									<div class="absolute inset-0 {item.icon} opacity-20"></div>
+									<div class="relative flex flex-col items-center gap-2">
+										<div class="h-8 w-8 rounded-full {item.icon} shadow-inner"></div>
+										<span class="text-xs font-black tracking-widest uppercase">{item.label}</span>
+										<span class="text-[8px] text-slate-500">{item.desc}</span>
+									</div>
+								</button>
+							{/each}
+						</div>
 					</section>
 				</div>
 			{/if}
@@ -851,6 +1056,170 @@
 				</div>
 			{/if}
 
+			{#if activeTab === 'suara'}
+				<div transition:fade={{ duration: 200 }} class="space-y-6">
+					{#each [{ key: 'preadzan' as const, label: 'Pra-Adzan', desc: `Setiap ${settings.value.preAdzanDuration} menit sebelum adzan (mode hitung mundur)`, color: 'text-amber-400', border: 'border-amber-500/10', bg: 'bg-amber-500/5' }, { key: 'azan' as const, label: 'Azan', desc: 'Tepat waktu adzan tiba (mode iqomah dimulai)', color: 'text-blue-400', border: 'border-blue-500/10', bg: 'bg-blue-500/5' }, { key: 'iqomah' as const, label: 'Iqomah', desc: 'Saat iqomah tiba (mode sholat dimulai)', color: 'text-emerald-400', border: 'border-emerald-500/10', bg: 'bg-emerald-500/5' }] as s (s.key)}
+						{@const cfg = settings.value.sound[s.key]}
+						<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+							<div class="mb-4 flex items-center justify-between">
+								<div class="flex items-center gap-3">
+									<Volume2 class="h-5 w-5 {s.color}" />
+									<h2 class="text-sm font-black tracking-widest uppercase">{s.label}</h2>
+								</div>
+								<label
+									class="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 transition-all hover:bg-slate-800"
+								>
+									<span class="text-[10px] font-black text-slate-500 uppercase">Nyala</span>
+									<input
+										type="checkbox"
+										bind:checked={cfg.enabled}
+										class="h-4 w-4 rounded border-slate-700 bg-slate-800 text-blue-500"
+									/>
+								</label>
+							</div>
+							<div class="mb-4 rounded-2xl border border-slate-800 bg-slate-950 p-4">
+								<label
+									for="sound-{s.key}"
+									class="mb-3 block text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase"
+									>Pilih Suara</label
+								>
+								<div class="flex gap-3">
+									<select
+										id="sound-{s.key}"
+										bind:value={cfg.file}
+										class="flex-1 rounded-xl border border-slate-800 bg-slate-900 p-4 text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
+									>
+										<option value="/sounds/mixkit-alarm-digital-clock-beep-989.wav"
+											>Digital Clock Beep</option
+										>
+										<option value="/sounds/mixkit-positive-interface-beep-221.wav"
+											>Positive Interface Beep</option
+										>
+										<option value="/sounds/u_edtmwfwu7c-beep-329314.mp3">Notification Beep</option>
+										<option value="/sounds/universfield-new-notification-022-370046.mp3"
+											>New Notification 1</option
+										>
+										<option value="/sounds/universfield-new-notification-036-485897.mp3"
+											>New Notification 2</option
+										>
+									</select>
+									<button
+										onclick={() => testSound(cfg.file)}
+										class="flex shrink-0 items-center gap-2 rounded-xl bg-blue-600 px-5 py-4 text-xs font-black text-white uppercase transition-all hover:bg-blue-500 active:scale-95"
+									>
+										<Play class="h-4 w-4" /> Tes
+									</button>
+								</div>
+							</div>
+							<div class="flex gap-3 rounded-2xl border {s.border} {s.bg} p-4">
+								<Volume2 class="h-4 w-4 shrink-0 {s.color}" />
+								<p class="text-[10px] leading-relaxed text-slate-400">{s.desc}</p>
+							</div>
+						</section>
+					{/each}
+				</div>
+			{/if}
+
+			{#if activeTab === 'status'}
+				<div transition:fade={{ duration: 200 }} class="space-y-6">
+					{#if serverStatus}
+						<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+							<div class="mb-6 flex items-center justify-between">
+								<div class="flex items-center gap-3">
+									<Activity class="h-5 w-5 text-emerald-400" />
+									<h2 class="text-sm font-black tracking-widest uppercase">Perangkat</h2>
+								</div>
+								<button
+									onclick={fetchStatus}
+									class="rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-[10px] font-black tracking-wider text-slate-400 uppercase transition-all hover:bg-slate-800"
+									>Segarkan</button
+								>
+							</div>
+							<div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+								<div class="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+									<p class="text-[9px] font-black tracking-[0.2em] text-slate-600 uppercase">
+										Platform
+									</p>
+									<p class="mt-1 text-sm font-black text-white">
+										{serverStatus.platform} ({serverStatus.arch})
+									</p>
+								</div>
+								<div class="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+									<p class="text-[9px] font-black tracking-[0.2em] text-slate-600 uppercase">CPU</p>
+									<p class="mt-1 text-sm font-black text-white">{serverStatus.cpus} Core</p>
+								</div>
+							</div>
+						</section>
+
+						<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+							<div class="mb-6 flex items-center gap-3">
+								<Activity class="h-5 w-5 text-blue-400" />
+								<h2 class="text-sm font-black tracking-widest uppercase">Memori</h2>
+							</div>
+							<div class="mb-4 flex items-end justify-between">
+								<span class="text-4xl font-black text-white tabular-nums"
+									>{serverStatus.memory.usagePercent}%</span
+								>
+								<div class="text-right">
+									<p class="text-xs font-bold text-slate-400">
+										{fmtBytes(serverStatus.memory.used)} / {fmtBytes(serverStatus.memory.total)}
+									</p>
+									<p class="text-[10px] font-bold text-slate-600">
+										Sisa {fmtBytes(serverStatus.memory.free)}
+									</p>
+								</div>
+							</div>
+							<div class="h-3 overflow-hidden rounded-full bg-slate-800">
+								<div
+									class="h-full rounded-full transition-all duration-1000 {serverStatus.memory
+										.usagePercent > 80
+										? 'bg-rose-500'
+										: serverStatus.memory.usagePercent > 50
+											? 'bg-amber-500'
+											: 'bg-emerald-500'}"
+									style="width: {serverStatus.memory.usagePercent}%"
+								></div>
+							</div>
+							<div class="mt-4 grid grid-cols-2 gap-4">
+								<div class="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+									<p class="text-[9px] font-black tracking-[0.2em] text-slate-600 uppercase">
+										Heap Node
+									</p>
+									<p class="mt-1 text-sm font-black text-white">{fmtBytes(serverStatus.heap)}</p>
+								</div>
+								<div class="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+									<p class="text-[9px] font-black tracking-[0.2em] text-slate-600 uppercase">
+										CPU Load
+									</p>
+									<p class="mt-1 text-sm font-black text-white">
+										{serverStatus.loadAvg[0].toFixed(2)}
+									</p>
+								</div>
+							</div>
+						</section>
+
+						<section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+							<div class="flex items-center justify-between">
+								<div class="flex items-center gap-3">
+									<Clock class="h-5 w-5 text-purple-400" />
+									<h2 class="text-sm font-black tracking-widest uppercase">Uptime</h2>
+								</div>
+								<div
+									class="text-right text-sm font-black text-white tabular-nums"
+								>
+									<p class="text-[10px] font-bold text-slate-500">Server</p>
+									<p>{fmtUptime(serverStatus.processUptime)}</p>
+								</div>
+							</div>
+						</section>
+					{:else}
+						<div class="flex items-center justify-center py-20">
+							<div class="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500"></div>
+						</div>
+					{/if}
+				</div>
+			{/if}
+
 			{#if activeTab === 'about'}
 				<div transition:fade={{ duration: 200 }} class="space-y-6">
 					<section
@@ -860,7 +1229,7 @@
 							<Cpu class="h-12 w-12 text-blue-400" />
 						</div>
 						<h2 class="text-2xl font-black tracking-tighter text-white uppercase">
-							Al-Ye'AnDiMo v1.0.6 (Hotfix)
+							Al-Ye'AnDiMo v1.1.0
 						</h2>
 						<p class="mt-2 text-xs font-bold tracking-[0.3em] text-slate-500 uppercase">
 							Alhamdulillah It's Yet Another Display Mosque
@@ -909,10 +1278,150 @@
 								>
 							</div>
 						</div>
+
+						<div class="my-8 h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent"></div>
+
+						<div class="text-center">
+							<h3 class="mb-6 text-sm font-black tracking-widest uppercase">Update & Versi</h3>
+
+							<p class="mb-6 text-sm text-slate-400">
+								Versi saat ini: <span class="font-bold text-white">v1.1.0</span>
+							</p>
+
+							{#if updateStatus === 'idle'}
+								<button
+									onclick={checkUpdate}
+									class="inline-flex items-center gap-2 rounded-2xl border border-blue-500/30 bg-blue-500/10 px-6 py-3 text-xs font-black tracking-widest text-blue-400 uppercase transition-all hover:bg-blue-500/20"
+								>
+									<RefreshCw class="h-4 w-4" /> Periksa Update
+								</button>
+
+							{:else if updateStatus === 'checking'}
+								<div class="flex items-center justify-center gap-3 text-sm text-slate-400">
+									<RefreshCw class="h-4 w-4 animate-spin" /> Memeriksa...
+								</div>
+
+							{:else if updateStatus === 'latest'}
+								<div class="space-y-4">
+									<div class="flex items-center justify-center gap-3 text-emerald-400">
+										<span class="text-2xl">✓</span>
+										<span class="text-sm font-bold">Sudah versi terbaru</span>
+									</div>
+									<button
+										onclick={checkUpdate}
+										class="inline-flex items-center gap-2 rounded-2xl border border-slate-700 bg-slate-800 px-6 py-3 text-xs font-black tracking-widest text-slate-400 uppercase transition-all hover:bg-slate-700"
+									>
+										<RefreshCw class="h-4 w-4" /> Periksa Lagi
+									</button>
+								</div>
+
+							{:else if updateStatus === 'available'}
+								<div class="space-y-4">
+									<div class="flex items-center justify-center gap-3 text-amber-400">
+										<Download class="h-5 w-5" />
+										<span class="text-sm font-bold">Update tersedia: {latestVersion}</span>
+									</div>
+									<div class="flex flex-wrap items-center justify-center gap-3">
+										<a
+											href={latestUrl}
+											target="_blank"
+											class="inline-flex items-center gap-2 rounded-2xl bg-amber-500 px-6 py-3 text-xs font-black tracking-widest text-black uppercase transition-all hover:bg-amber-400"
+										>
+											<Download class="h-4 w-4" /> Download
+										</a>
+										<button
+											onclick={applyUpdate}
+											disabled={String(updateStatus) === 'applying'}
+											class="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3 text-xs font-black tracking-widest text-white uppercase transition-all hover:bg-emerald-500 disabled:opacity-50 active:scale-95"
+										>
+											{#if String(updateStatus) === 'applying'}
+												<RefreshCw class="h-4 w-4 animate-spin" /> Mengupdate...
+											{:else}
+												<Download class="h-4 w-4" /> Update & Restart
+											{/if}
+										</button>
+										<button
+											onclick={checkUpdate}
+											class="inline-flex items-center gap-2 rounded-2xl border border-slate-700 bg-slate-800 px-6 py-3 text-xs font-black tracking-widest text-slate-400 uppercase transition-all hover:bg-slate-700"
+										>
+											<RefreshCw class="h-4 w-4" /> Periksa Lagi
+										</button>
+									</div>
+									{#if releaseNotes}
+										<div class="mt-4 max-h-32 overflow-y-auto rounded-xl border border-slate-800 bg-slate-950 p-4 text-left text-xs leading-relaxed text-slate-500">
+											{releaseNotes}
+										</div>
+									{/if}
+								</div>
+
+							{:else if updateStatus === 'applying'}
+								<div class="space-y-4">
+									<div class="flex items-center justify-center gap-3 text-emerald-400">
+										<RefreshCw class="h-5 w-5 animate-spin" />
+										<span class="text-sm font-bold">Memasang update...</span>
+									</div>
+									<p class="text-xs text-slate-500">
+										Server akan restart otomatis. Halaman ini akan dimuat ulang setelah update selesai.
+									</p>
+								</div>
+
+							{:else if updateStatus === 'error'}
+								<div class="space-y-4">
+									<div class="text-sm text-rose-400">Gagal memeriksa update</div>
+									{#if updateError}
+										<p class="text-[10px] text-slate-600">{updateError}</p>
+									{/if}
+									<button
+										onclick={checkUpdate}
+										class="inline-flex items-center gap-2 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-6 py-3 text-xs font-black tracking-widest text-rose-400 uppercase transition-all hover:bg-rose-500/20"
+									>
+										<RefreshCw class="h-4 w-4" /> Coba Lagi
+									</button>
+								</div>
+							{/if}
+
+							<div class="mt-6 flex flex-wrap justify-center gap-2 text-[10px] text-slate-600">
+								<a
+									href="https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases"
+									target="_blank"
+									class="flex items-center gap-1 rounded-lg border border-slate-800 px-3 py-1.5 transition-all hover:border-slate-700 hover:text-slate-400"
+								>
+									Semua Rilis
+								</a>
+								<a
+									href="https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/blob/main/INSTALL.md"
+									target="_blank"
+									class="flex items-center gap-1 rounded-lg border border-slate-800 px-3 py-1.5 transition-all hover:border-slate-700 hover:text-slate-400"
+								>
+									Panduan Instalasi
+								</a>
+							</div>
+						</div>
 					</section>
 				</div>
 			{/if}
 		</main>
+
+		<!-- Toast Notification -->
+		{#if toastVisible}
+			<div
+				class="fixed top-6 right-6 z-50 flex items-center gap-3 rounded-2xl border px-5 py-4 shadow-2xl backdrop-blur-xl transition-all {toastType === 'success'
+					? 'border-emerald-500/30 bg-emerald-900/80 text-emerald-300'
+					: toastType === 'error'
+						? 'border-rose-500/30 bg-rose-900/80 text-rose-300'
+						: 'border-blue-500/30 bg-blue-900/80 text-blue-300'}"
+				transition:fade={{ duration: 200 }}
+			>
+				{#if toastType === 'success'}
+					<Check class="h-5 w-5" />
+				{:else if toastType === 'error'}
+					<X class="h-5 w-5" />
+				{:else}
+					<Info class="h-5 w-5" />
+				{/if}
+				<p class="text-sm font-bold">{toastMessage}</p>
+			</div>
+		{/if}
 
 		<footer class="pointer-events-none fixed right-0 bottom-6 left-0 z-50 px-6">
 			<div class="pointer-events-auto mx-auto max-w-md">
@@ -940,7 +1449,6 @@
 		scrollbar-width: none;
 	}
 
-	/* Hide spin buttons */
 	input[type='number']::-webkit-inner-spin-button,
 	input[type='number']::-webkit-outer-spin-button {
 		-webkit-appearance: none;

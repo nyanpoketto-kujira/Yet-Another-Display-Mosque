@@ -3,7 +3,10 @@
  */
 export function formatRupiah(amount: number | string): string {
 	const num = typeof amount === 'string' ? parseInt(amount.replace(/[^0-9]/g, '')) : amount;
-	const formattedCurrency = new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(num);
+	const formattedCurrency = new Intl.NumberFormat('id-ID', {
+		style: 'currency',
+		currency: 'IDR'
+	}).format(num);
 	if (isNaN(num)) return '0';
 	return formattedCurrency;
 }

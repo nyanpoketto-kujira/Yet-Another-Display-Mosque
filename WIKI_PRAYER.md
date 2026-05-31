@@ -24,7 +24,7 @@ Layar utama (`Main Display`) secara otomatis berpindah mode berdasarkan waktu sh
 
 ## 📅 Kalender Hijriah
 
-Konversi tanggal Hijriah dilakukan secara dinamis menggunakan library `moment-hijri`. Hal ini memungkinkan penyesuaian tanggal Islam secara akurat tanpa perlu update manual tiap hari.
+Konversi tanggal Hijriah dilakukan secara dinamis menggunakan API bawaan JavaScript `Intl.DateTimeFormat` dengan kalender `islamic-umalqura`. Hal ini memungkinkan penyesuaian tanggal Islam secara akurat tanpa perlu library tambahan.
 
 ## 🛠️ Debug & QA (Mode Simulasi)
 

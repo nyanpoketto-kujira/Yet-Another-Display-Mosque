@@ -42,3 +42,26 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	:global(.perf-ringan) :global(.shadow-\[0_0_50px_rgba\(168\,85\,247\,0\.2\)\]),
+	:global(.perf-minimal) :global(.shadow-\[0_0_50px_rgba\(168\,85\,247\,0\.2\)\]) {
+		box-shadow: none !important;
+	}
+	:global(.perf-ringan) :global(.animate-pulse),
+	:global(.perf-minimal) :global(.animate-pulse) {
+		animation: none !important;
+	}
+	:global(.perf-ringan) :global(.backdrop-blur-xl),
+	:global(.perf-minimal) :global(.backdrop-blur-xl) {
+		backdrop-filter: none !important;
+		-webkit-backdrop-filter: none !important;
+		background: rgba(255, 255, 255, 0.05);
+	}
+	:global(.perf-minimal) :global(.backdrop-blur-xl) {
+		background: rgba(30, 20, 50, 0.8);
+	}
+	:global(.perf-minimal) :global(.drop-shadow-2xl) {
+		filter: none !important;
+	}
+</style>

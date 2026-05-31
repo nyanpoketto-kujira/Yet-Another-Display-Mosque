@@ -2,7 +2,7 @@
 
 **Bahasa Indonesia** | [English](README.en.md)
 
-![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Build](https://img.shields.io/badge/build-Svelte_5-orange.svg)
 [![Demo](https://img.shields.io/badge/demo-live-success.svg)](https://al-yeandimo-demo.vercel.app/)
@@ -22,6 +22,7 @@
 - 💰 **Manajemen Kas (BETA)**: Pencatatan pemasukan & pengeluaran yang transparan (Dapat dicoba di build terbaru).
 - 📜 **Informasi & Teks Berjalan**: Sampaikan pengumuman atau hadits dengan gaya elegan.
 - 🕌 **Mode Jum'at**: Tampilan khusus untuk nama Khathib dan durasi khutbah.
+- 🔄 **Auto-Update via Panel Admin**: Update versi langsung dari tab About tanpa perlu SSH/terminal.
 
 ## 📸 Galeri Tampilan
 
@@ -63,6 +64,15 @@ Kelola semua konten display dengan mudah melalui HP atau PC.
 
 </details>
 
+## 🆕 Apa yang Baru di v1.1.0
+
+- **🔄 Auto-Update**: Update versi langsung dari Panel Admin → tab About. Tidak perlu SSH/terminal lagi.
+- **🔒 Keamanan CSP**: Content Security Policy diperkuat untuk proteksi XSS.
+- **⚡ Proses update aman**: Backup data & upload otomatis sebelum update, restore jika ada masalah.
+- **📱 Deteksi versi pintar**: Perbandingan semver numeric — tahu persis apakah versi Anda terbaru.
+
+> 🚀 **v1.1.0 adalah rilis dengan fitur auto-update. Mulai sekarang, update bisa dilakukan oleh siapapun, bahkan tanpa pengalaman teknis.**
+
 ## 🛠️ Tech Stack
 
 - **Framework**: [Svelte 5](https://svelte.dev/) (Runes)
@@ -77,38 +87,69 @@ Untuk pengurus masjid yang ingin memasang sistem ini di layar display, silakan b
 
 👉 **[PANDUAN INSTALASI & SETUP (MOSQUE_INSTALL.md)](MOSQUE_INSTALL.md)**
 
-## 📦 Download Rilisan Siap Pakai
+## 📦 Download & Instalasi
 
-Jika Anda tidak ingin melakukan build dari source code, Anda bisa mengunduh paket runner yang sudah jadi untuk Linux atau Windows di halaman **[Releases](https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases)**.
+### Pengguna Baru?
+1. Download file ZIP dari **[halaman Releases](https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases)** sesuai OS Anda
+2. Ekstrak dan jalankan `start.sh` (Linux) atau `start.bat` (Windows)
+3. Buka `http://localhost:3000` di browser
 
-## 🛠️ Pengembangan (Untuk Developer)
+👉 Lihat panduan lengkap → **[INSTALL.md](INSTALL.md)** (cara pasang di Android TV, Linux, Windows)
 
-1. **Clone Repository**
+### Update ke Versi Baru
 
-   ```bash
-   git clone https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque.git
-   cd Yet-Another-Display-Mosque
-   ```
+#### 🆕 v1.1.0+ — Auto-Update via Panel Admin (Termudah)
+1. Buka Panel Admin → tab **About**
+2. Klik **"Periksa Update"**
+3. Jika ada versi baru, klik **"Update & Restart"**
+4. Server akan otomatis download, backup data, dan restart
 
-2. **Install Dependencies**
+#### v1.0.6 ke bawah — Script Manual
+Hanya untuk yang masih pakai versi lawas:
+```bash
+cd folder-yadm
+bash scripts/update.sh
+```
 
-   ```bash
-   pnpm install
-   ```
+### Build dari Source (untuk developer)
+1. Clone repo: `git clone https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque.git`
+2. Install deps: `pnpm install`
+3. Build: `bash build.sh`
+4. Hasil ZIP ada di folder `dist/`
 
-3. **Jalankan Mode Development**
+## 🏗️ Struktur Folder (Saat Berjalan)
 
-   ```bash
-   pnpm dev
-   ```
+```
+├── build/                  # Hasil build SvelteKit (siap jalan)
+├── data/
+│   └── settings.json       # Data pengaturan (backup otomatis)
+├── static/
+│   └── uploads/            # Background gambar
+├── scripts/
+│   ├── install-termux.sh   # Installer Android TV
+│   └── update.sh           # Update manual (pre-v1.1.0)
+├── yadm.service            # Auto-start Linux (systemd)
+├── start.sh / start.bat    # Script menjalankan server
+├── INSTALL.md              # Panduan instalasi lengkap
+└── README.md               # File ini
+```
 
-4. **Build Paket Runner**
-   ```bash
-   bash build.sh
-   ```
+## 🔒 Keamanan
+- Semua aksi admin (POST/DELETE) dilindungi Bearer token
+- Password tidak dikirim ke client (disimpan server-side)
+- Upload gambar divalidasi magic bytes (hanya JPEG/PNG/WebP)
+- Path traversal dicegah
+- Atomic write (tmp → rename) — data aman walau listrik padam
+- Error boundary — tidak ada blank screen
+- Content Security Policy (CSP) — perlindungan dari serangan XSS
+- Auto-Update dilindungi Bearer token (sama dengan aksi admin lainnya)
+
+## ⚡ Performa
+- **3 level mode grafis**: Penuh / Ringan / Minimal (untuk Android TV box 1-2GB RAM)
+- Setelan ada di Panel Admin → tab Umum → Mode Tampilan
+- Mode Minimal: tanpa blur, shadow, animasi. Hanya teks & warna solid.
 
 ## 📝 Lisensi
-
 Proyek ini berada di bawah lisensi MIT. Silakan gunakan dan modifikasi untuk kemaslahatan umat.
 
 ---

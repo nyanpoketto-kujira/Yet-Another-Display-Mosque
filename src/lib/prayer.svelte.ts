@@ -27,9 +27,12 @@ class PrayerService {
 		this.#debugOffset = 0;
 	}
 
-	prayerTimes = $derived.by(() => {
+	#prayerTimesCache = $state(this.#calcPrayerTimes());
+	#lastCalcDate = '';
+
+	#calcPrayerTimes() {
 		const coords = new Coordinates(settings.value.lat, settings.value.lng);
-		const date = new Date(this.now.getTime() + this.#debugOffset); // Gunakan waktu simulasi untuk hitung jadwal
+		const date = new Date(this.now.getTime() + this.#debugOffset);
 		const params = CalculationMethod.Singapore();
 		const pt = new PrayerTimes(coords, date, params);
 
@@ -42,7 +45,11 @@ class PrayerService {
 		const isha = new Date(pt.isha.getTime() + (settings.value.offsets.isha || 0) * 60000);
 
 		return { fajr, sunrise, dhuha, dhuhr, asr, maghrib, isha };
-	});
+	}
+
+	get prayerTimes() {
+		return this.#prayerTimesCache;
+	}
 
 	currentTime = $derived.by(() => {
 		return new Date(this.now.getTime() + (settings.value.drift || 0) * 1000 + this.#debugOffset);
@@ -189,8 +196,15 @@ class PrayerService {
 	constructor() {
 		if (browser) {
 			setInterval(() => {
-				this.now = new Date();
-				// Kalo lagi debug, kurangin timer manual tiap detik
+				const now = new Date();
+				this.now = now;
+
+				const today = now.toDateString();
+				if (today !== this.#lastCalcDate) {
+					this.#lastCalcDate = today;
+					this.#prayerTimesCache = this.#calcPrayerTimes();
+				}
+
 				if (this.#debugCountdown !== null && this.#debugCountdown > 0) {
 					this.#debugCountdown--;
 				}

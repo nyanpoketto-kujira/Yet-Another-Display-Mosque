@@ -1,57 +1,6 @@
 import { browser } from '$app/environment';
-
-export interface Transaction {
-	id: string;
-	date: string;
-	desc: string;
-	amount: number;
-	type: 'in' | 'out';
-}
-
-export interface InfoItem {
-	id: string;
-	header: string;
-	content: string;
-	footer: string;
-	active: boolean;
-}
-
-export interface Settings {
-	lat: number;
-	lng: number;
-	offsets: {
-		fajr: number;
-		sunrise: number;
-		dhuha: number;
-		dhuhr: number;
-		asr: number;
-		maghrib: number;
-		isha: number;
-	};
-	iqomah: {
-		fajr: number;
-		dhuhr: number;
-		asr: number;
-		maghrib: number;
-		isha: number;
-	};
-	drift: number;
-	cash: number;
-	runningText: string;
-	bigInfo: string;
-	infos: InfoItem[];
-	preAdzanDuration: number;
-	sholatDuration: number;
-	bgSlideshowDuration: number; // Detik
-	infoSlideshowDuration: number; // Detik
-	transactions: Transaction[];
-	adminPassword: string;
-	backgrounds: string[];
-	fridayKhatib: string;
-	fridayKhutbahDuration: number; // Menit
-	hideTransactionAmount: boolean;
-	theme: 'vibe' | 'modern' | 'classic' | 'ocean' | 'sunset';
-}
+import { getToken } from './auth';
+import type { Settings } from './types';
 
 const DEFAULT_SETTINGS: Settings = {
 	lat: -6.2,
@@ -75,7 +24,7 @@ const DEFAULT_SETTINGS: Settings = {
 	],
 	preAdzanDuration: 10,
 	sholatDuration: 15,
-	bgSlideshowDuration: 60,
+	bgSlideshowDuration: 1,
 	infoSlideshowDuration: 15,
 	transactions: [],
 	adminPassword: 'vibe-masjid',
@@ -83,11 +32,18 @@ const DEFAULT_SETTINGS: Settings = {
 	fridayKhatib: 'Ustadz Ahmad Fulan',
 	fridayKhutbahDuration: 20,
 	hideTransactionAmount: false,
-	theme: 'vibe'
+	theme: 'vibe',
+	sound: {
+		preadzan: { enabled: true, file: '/sounds/universfield-new-notification-022-370046.mp3' },
+		azan: { enabled: true, file: '/sounds/universfield-new-notification-036-485897.mp3' },
+		iqomah: { enabled: true, file: '/sounds/u_edtmwfwu7c-beep-329314.mp3' }
+	},
+	performanceMode: 'penuh',
 };
 
 class SettingsStore {
 	#value = $state<Settings>(DEFAULT_SETTINGS);
+	#loading = $state(true);
 
 	get value() {
 		return this.#value;
@@ -96,35 +52,49 @@ class SettingsStore {
 		this.#value = v;
 	}
 
+	get loading() {
+		return this.#loading;
+	}
+
 	async load() {
 		if (!browser) return;
+		this.#loading = true;
 		try {
 			const res = await fetch('/api/settings');
 			if (res.ok) {
 				const data = await res.json();
-				this.#value = { ...DEFAULT_SETTINGS, ...data };
+				const currentPwd = this.#value.adminPassword;
+				this.#value = { ...DEFAULT_SETTINGS, ...data, adminPassword: currentPwd };
 			}
 		} catch (e) {
-			console.error('Gagal muat pengaturan:', e);
+			console.warn('Gagal muat pengaturan:', e);
+		} finally {
+			this.#loading = false;
 		}
 	}
 
 	update(newSettings: Partial<Settings>) {
 		this.#value = { ...this.#value, ...newSettings };
-		this.save();
 	}
 
 	async save() {
 		if (!browser) return;
 		try {
+			const token = getToken();
+			const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+			if (token) headers['Authorization'] = `Bearer ${token}`;
+
 			const dataToSave = $state.snapshot(this.#value);
-			await fetch('/api/settings', {
+			const res = await fetch('/api/settings', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers,
 				body: JSON.stringify(dataToSave)
 			});
+			if (!res.ok) {
+				console.warn('Gagal simpan:', res.status);
+			}
 		} catch (e) {
-			console.error('Gagal simpan pengaturan:', e);
+			console.warn('Gagal simpan pengaturan:', e);
 		}
 	}
 }

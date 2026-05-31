@@ -14,6 +14,17 @@
 	}
 
 	const themeClasses = $derived.by(() => {
+		if (settings.value.performanceMode === 'minimal') {
+			if (!isActive) return 'border-white/10 bg-slate-700/60 text-white/90';
+			return 'scale-100 border-amber-400/50 bg-amber-700/50 text-white';
+		}
+
+		if (settings.value.performanceMode === 'ringan') {
+			if (!isActive) return 'border-white/10 bg-slate-700/30 text-white/90';
+			return 'scale-100 border-amber-400/30 bg-amber-700/30 text-white';
+		}
+
+		// Full mode
 		if (!isActive)
 			return 'border-white/10 bg-white/5 text-white/90 backdrop-blur-lg hover:bg-white/10';
 
@@ -33,7 +44,7 @@
 </script>
 
 <div
-	class="flex h-full w-full flex-col items-center justify-center rounded-[2.5vh] border p-[1vh] transition-all duration-700 {themeClasses}"
+	class="flex h-full w-full flex-col items-center justify-center rounded-[2.5vh] border p-[1vh] {settings.value.performanceMode === 'minimal' ? '' : 'transition-all duration-700'} {themeClasses}"
 >
 	<span
 		class="mb-[0.2vh] text-[clamp(0.8rem,1.8vh,1.5rem)] font-black tracking-[0.2em] uppercase opacity-60"

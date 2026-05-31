@@ -19,8 +19,9 @@ Pilih salah satu cara berikut untuk memasang YADM:
 ### Cara A: Menggunakan Paket Siap Pakai (Rekomendasi)
 
 1.  Buka halaman [Releases](https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases).
-2.  Unduh file sesuai OS Anda (`yadm-linux.zip` atau `yadm-windows.zip`).
-3.  Ekstrak folder tersebut ke lokasi yang diinginkan (contoh: `D:\YADM` atau `/home/pi/YADM`).
+2.  Unduh file ZIP sesuai OS Anda (`yadm-*-linux-x64.zip` atau `yadm-*-windows-x64.zip`).
+3.  Ekstrak isinya ke lokasi yang diinginkan (contoh: `D:\YADM` atau `/home/pi/YADM`).
+4.  Di dalam folder sudah ada file `start.sh` (Linux) atau `start.bat` (Windows).
 
 ### Cara B: Build dari Source (Untuk Developer)
 
@@ -35,13 +36,13 @@ Pilih salah satu cara berikut untuk memasang YADM:
 
 ### Di Windows
 
-1.  Masuk ke folder `runner/windows`.
+1.  Masuk ke folder YADM (hasil ekstrak ZIP).
 2.  Klik dua kali file `start.bat`.
 3.  Buka browser (Chrome/Edge), ketik alamat: `http://localhost:3000`.
 
 ### Di Linux
 
-1.  Buka terminal, masuk ke folder `runner/linux`.
+1.  Buka terminal, masuk ke folder YADM (hasil ekstrak ZIP).
 2.  Jalankan perintah: `./start.sh`.
 3.  Buka browser, ketik alamat: `http://localhost:3000`.
 
@@ -83,8 +84,8 @@ Ini agar program jalan otomatis sebelum Anda login ke desktop.
   [Service]
   Type=simple
   User=NAMA_USER_ANDA
-  WorkingDirectory=/home/NAMA_USER_ANDA/YADM/runner/linux
-  ExecStart=/home/NAMA_USER_ANDA/YADM/runner/linux/start.sh
+  WorkingDirectory=/home/NAMA_USER_ANDA/YADM
+  ExecStart=/home/NAMA_USER_ANDA/YADM/start.sh
   Restart=always
 
   [Install]
@@ -147,6 +148,27 @@ Saat dalam Mode Kiosk (Fullscreen), Anda tidak akan melihat tombol close atau ta
 
 ---
 
+## 🔄 Langkah 5: Update Versi (v1.1.0+)
+
+Mulai versi **v1.1.0**, Anda bisa memperbarui YADM langsung dari Panel Admin — **tanpa perlu SSH, terminal, atau download manual**.
+
+1. Buka browser, akses Panel Admin: `http://localhost:3000/admin`
+2. Login dengan password admin
+3. Klik tab **About**
+4. Klik **"Periksa Update"**
+5. Jika ada versi baru, klik **"Update & Restart"**
+
+**Proses otomatis yang terjadi:**
+- ✅ Download ZIP versi baru dari GitHub
+- ✅ Backup data pengaturan & gambar upload
+- ✅ Pasang build baru
+- ✅ Pulihkan data (setting & uploads tetap aman)
+- ✅ Restart server
+
+> **Untuk pengguna versi sebelum 1.1.0**: update manual dulu ke v1.1.0 (lihat [INSTALL.md](INSTALL.md#v106-ke-bawah--script-manual-untuk-versi-lawas)), setelah itu bisa pakai auto-update.
+
+---
+
 ## 🛠️ Troubleshooting (Tanya Jawab)
 
 **Q: Kenapa jadwal sholat tidak muncul/salah?**
@@ -170,6 +192,18 @@ Saat dalam Mode Kiosk (Fullscreen), Anda tidak akan melihat tombol close atau ta
 
 - Refresh halaman atau cek di Panel Admin apakah gambar sudah terdaftar.
 - Pastikan ukuran gambar tidak terlalu besar (disarankan di bawah 2MB).
+
+**Q: Bagaimana cara update versi?**
+
+- **v1.1.0+**: Buka Panel Admin → tab **About** → **Periksa Update** → **Update & Restart**
+- **Sebelum v1.1.0**: Jalankan `bash scripts/update.sh` di terminal, atau download ZIP manual dari halaman [Releases](https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases)
+
+**Q: Update gagal / error?**
+
+- Pastikan server punya koneksi internet untuk mendownload ZIP
+- Cek folder `data/` dan `static/uploads/` masih ada (backup dibuat otomatis sebelum update)
+- Coba refresh halaman admin, lalu coba lagi
+- Jika terus gagal, lakukan update manual (download ZIP dari Releases, ekstrak, copy `build/`)
 
 ---
 

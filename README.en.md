@@ -22,6 +22,7 @@
 - 💰 **Cash Management (BETA)**: Transparent recording of income & expenses (Available to try in the latest build).
 - 📜 **Information & Scrolling Text**: Convey announcements or hadiths with an elegant style.
 - 🕌 **Friday Mode**: Specialized display for Khatib names and khutbah duration.
+- 🔄 **Auto-Update via Admin Panel**: Update directly from the About tab — no SSH or terminal needed.
 
 ## 📸 Display Gallery
 
@@ -63,6 +64,15 @@ Manage all display content easily via Mobile or PC.
 
 </details>
 
+## 🆕 What's New in v1.1.0
+
+- **🔄 Auto-Update**: Update directly from Admin Panel → About tab. No SSH or terminal required.
+- **🔒 Security Hardening**: CSP (Content Security Policy) headers strengthened for XSS protection.
+- **⚡ Safe update process**: Automatic backup of data & uploads before updating, restore if anything goes wrong.
+- **📱 Smart version detection**: Numeric semver comparison — knows exactly whether your version is up-to-date.
+
+> 🚀 **v1.1.0 is the auto-update release. From now on, anyone can update the system — even without technical experience.**
+
 ## 🛠️ Tech Stack
 
 - **Framework**: [Svelte 5](https://svelte.dev/) (Runes)
@@ -77,9 +87,29 @@ For mosque administrators who want to install this system, please read the full 
 
 👉 **[INSTALLATION & SETUP GUIDE (MOSQUE_INSTALL.md)](MOSQUE_INSTALL.md)**
 
-## 📦 Download Ready-to-Use Releases
+## 📦 Download & Installation
 
-If you don't want to build from source code, you can download the ready-made runner package for Linux or Windows on the **[Releases](https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases)** page.
+### New Users
+1. Download the ZIP file from the **[Releases](https://github.com/nyanpoketto-kujira/Yet-Another-Display-Mosque/releases)** page for your OS
+2. Extract and run `start.sh` (Linux) or `start.bat` (Windows)
+3. Open `http://localhost:3000` in your browser
+
+👉 Full guide → **[INSTALL.md](INSTALL.md)** (Android TV, Linux, Windows)
+
+### Updating to a New Version
+
+#### 🆕 v1.1.0+ — Auto-Update via Admin Panel (Easiest)
+1. Open Admin Panel → **About** tab
+2. Click **"Check for Updates"**
+3. If a new version is available, click **"Update & Restart"**
+4. The server will automatically download, backup data, and restart
+
+#### v1.0.6 and below — Manual Script
+For older versions only:
+```bash
+cd yadm-folder
+bash scripts/update.sh
+```
 
 ## 🛠️ Development (For Developers)
 
@@ -105,6 +135,7 @@ If you don't want to build from source code, you can download the ready-made run
 4. **Build Runner Package**
    ```bash
    bash build.sh
+   # Output: dist/yadm-<version>-linux-x64.zip and -windows-x64.zip
    ```
 
 ## 📝 License
